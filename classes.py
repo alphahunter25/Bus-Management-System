@@ -1,30 +1,39 @@
 from random import randint
 
-# class Person:
-#     def __init__(self, name, age):
-#         self.name = name
-#         self.age = age
-#         self.cnic = randint(100000, 999999)
 
-#     def editinfo(self, name, age):
-#         self.name = name
-#         self.age = age
+#accounts system
+class Person:
+    def __init__(self, name, age, cnic):
+        self.name = name
+        self.age = age
+        self.cnic = cnic
+
+    def editinfo(self, name, age, cnic):
+        self.name = name
+        self.age = age
+        self.cnic = cnic
     
-#     def viewinfo(self):
-#         print(f"Name: {self.name}\nAge: {self.age}\nCNIC: {self.cnic}")
+    def viewinfo(self):
+        print(f"Name: {self.name}\nAge: {self.age}\nCNIC: {self.cnic}")
 
-#accounts
-class Account:
-    def __init__(self, username, password):
+
+class Account(Person):
+    def __init__(self, username, password, name, age, cnic):
         self.username = username
         self.password = password
+        self.name = name
+        self.age = age
+        self.cnic = cnic
         self.bookings = []
 
     def changeinfo(self, username, password):
         self.username = username
         self.password = password
+    
+    def userinfo(self):
+        print(f"_User_ : {self.username}\n_Name_ : {self.name}\n_Age_ : {self.age}\n_CNIC_ : {self.cnic}")
 
-    def viewinfo(self):
+    def viewtickets(self):
         print(f"_User_ : {self.username}\n_Current Bookings_:{self.bookings} ")
 
     def bookticket(self, ticket):
@@ -34,7 +43,7 @@ class Account:
         self.bookings.remove(ticket)
 
 
-#branch system
+#branch/bus system
 class Branch:
     def __init__(self, location):
         self.code = randint(10000, 99999)
