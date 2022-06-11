@@ -1,0 +1,20 @@
+{
+  "cats": [
+    {
+      "name": "jojo",
+      "age": 12,
+      "color": "brown"
+    },
+    {
+      "name": "jeff",
+      "age": 14,
+      "color": "black"
+    },
+    {
+      "name": "jo",
+      "age": 11,
+      "color": "purple"
+    }
+  ]
+}
+
