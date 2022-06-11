@@ -18,9 +18,10 @@ class Person:
 
 
 class Account(Person):
-    def __init__(self, username, password, name, age, cnic):
+    def __init__(self, username, password, name, age, cnic, branch):
         self.username = username
         self.password = password
+        self.branch =branch
         self.name = name
         self.age = age
         self.cnic = cnic
@@ -36,11 +37,56 @@ class Account(Person):
     def viewtickets(self):
         print(f"_User_ : {self.username}\n_Current Bookings_:{self.bookings} ")
 
-    def bookticket(self, ticket):
-        self.bookings.append(ticket)
+    def bookticket(self):
 
-    def cancelticket(self, ticket):
-        self.bookings.remove(ticket)
+        for i in range(len(self.branch.routes)):
+            print(f"{i+1} : {self.branch.routes[i].display()}")
+        choice = int(input("Enter your choice: "))
+        tier = input(f"Would you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.buses[1].fare} on First Class)\nEnter E for Economy or F for First Class: ")
+        if choice < len(self.branch.routes) and tier == "E":
+            if self.branch.buses[i*2].availability == "booked":
+                return "Sorry, this bus is booked."
+            ticket = Ticket(self.branch.buses[i*2-1], self.branch.routes[choice-1])
+            self.bookings.append(ticket)
+            self.branch.buses[i*2-1].seats.book(self.username)
+            self.branch.buses[i*2-1].setavailibility()
+            self.branch.revenue += self.branch.routes[choice-1].fare
+            return f"Ticket booked successfully."
+            
+
+        elif choice < len(self.branch.routes) and tier == "F":
+            if self.branch.buses[i*2].availability == "booked":
+                return "Sorry, this bus is booked."
+            ticket = Ticket(self.branch.buses[i*2], self.branch.routes[choice-1])
+            self.branch.buses[i*2].seats.book(self.username)
+            self.branch.buses[i*2].setavailibility()
+            self.bookings.append(ticket)
+            self.branch.revenue += self.branch.routes[choice-1].fare
+            self.branch.revenue += self.branch.buses[i*2].fare
+            return f"Ticket booked successfully."
+
+        else:
+            print("Invalid choice.")
+            return False
+
+    def cancelticket(self):
+        for i in range(len(self.bookings)):
+            print(f"{i+1} : {self.bookings[i].display()}")
+        choice = int(input("Enter the number of the ticket you want to remove: "))
+        if choice < len(self.bookings):
+            for bus in self.branch.buses:
+                if bus.license == self.bookings[choice-1].bus.license:
+                    bus.seats.cancel(self.username)
+                    bus.setavailibility()
+
+            self.bookings.pop(choice-1)
+            return f"Ticket cancelled successfully."
+
+        print("Invalid choice.")
+        return False
+
+            
+
 
 
 #branch/bus system
@@ -49,11 +95,15 @@ class Branch:
         self.code = randint(10000, 99999)
         self.location = location
         self.routes = []
+        for i in self.routes:
+            self.buses.append(Economy(i))
+            self.buses.append(FirstClass(i))
         self.buses = []
         self.revenue = 0
 
     def branchinfo(self):
         print(f"Branch Code - {self.code}\nBranch Location - {self.location}\nBranch Routes - {self.routes}\nBranch Buses - {self.buses}\nBranch Revenue - {self.revenue}")
+
 
     def viewroutes(self):
         print(f"Current Routes:\n{self.routes}")
@@ -64,7 +114,12 @@ class Seat:
         self.availability = "Available"
 
     def book(self, account):
-        self.bookedby = account  
+        self.bookedby = account
+        self.availability = "Booked"  
+
+    def cancel(self):
+        self.bookedby = None
+        self.availability = "Available"
 
 class Bus:
     def __init__(self, route):
@@ -72,18 +127,21 @@ class Bus:
         self.route = route
         self.numseats = 24
         self.seats = []
+
         for i in range(self.numseats):
             self.seats.append(Seat())
         self.availablility = "Available"
 
+        self.availableseats = self.seats.copy()
+
 
     def seatinfo(self, num):
-        print(f"Status of seat {num}: {self.seats[num-1].availability}")
+        print(f"Seat {num} is : {self.seats[num-1].availability}")
 
-    def availability(self):
+    def seatavailability(self):
         status = 0
         for i in self.seats:
-            if i.availability == "Available":
+            if i.availability == "Booked":
                 status += 1
 
         if status == 24:
@@ -95,7 +153,7 @@ class Bus:
 
     
     def businfo(self):
-        print(f"License Plate - {self.license}\nBus Route - {self.route}\nBus Number of Seats - {self.numseats}\nAvailablility - {self.availablility()}")
+        print(f"License Plate - {self.license}\nBus Route - {self.route}\nBus Number of Seats - {self.numseats}\nAvailablility - {self.seatavailability()}")
 
 
 class Economy(Bus):
@@ -121,6 +179,104 @@ class FirstClass(Bus):
     def businfo(self):
         print(f"Tier - {self.type}")
         super().businfo()
+
+
+#route management
+class Route:
+    def __init__(self, start, destination, fee, departure):
+        self.start = start
+        self.destination = destination
+        self.fee = fee
+        self.departure = departure
+    
+    def display(self):
+        return f"{self.start} to {self.destination}\nFee: {self.fee}\nDeparture: {self.departure}"
+
+
+
+
+#tickets
+class Ticket:
+    def __init__(self, route, bus, seatnum):
+        self.route = route
+        self.bus = bus
+        self.type = self.bus.type
+        self.seatnum = seatnum
+
+    def display(self):
+        return f"{self.route.display()}\n\nTier: {self.bus.tier}\nLicense Plate: {self.bus.license}\nSeat Number: {self.seatnum}"
+
+
+
+#admin
+class Admin:
+    def changefares(self, bus):
+        bus.setfare(int(input("Enter the new fare: ")))
+
+    def viewrevenue(self, branch):
+        print(f"{branch.location} has made ${branch.revenue}")
+
+    def addroute(self,branch, start, des, fee, dep):
+        branch.routes.append(Route(start, des, fee, dep))
+        branch.buses.append(Economy(branch.routes[-1]))
+        branch.buses.append(FirstClass(branch.routes[-1]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def tester():
+    #initializa and run everything
+    branch1 = Branch("Karachi")
+    branch1.branchinfo()
+    branch1.viewroutes()
+    branch1.routes.append("Route 1")
+    branch1.viewroutes()
+
+    person1 = Person("John", 20, "123456789")
+    person1.viewinfo()
+    person1.editinfo("John Doe", 21, "123456789")
+    person1.viewinfo()
+
+    account1 = Account("john", "123", "John Doe", 21, "123456789", branch1)
+    account1.viewinfo()
+    account1.userinfo()
+    account1.bookticket()
+    account1.viewtickets()
+    account1.cancelticket()
+    account1.viewtickets()
+
+
+
+    bus1 = Bus("Route 1")
+    bus1.businfo()
+    bus1.seatinfo(1)
+    bus1.seatinfo(2)
+    bus1.seatinfo(3)
+
+    bus2 = FirstClass("Route 1", 1000)
+    bus2.businfo()
+    bus2.seatinfo(1)
+    bus2.seatinfo(2)
+
+    bus3 = Economy("Route 1")
+    bus3.businfo()
+    bus3.seatinfo(1)
+
+# tester()
 
 
 
