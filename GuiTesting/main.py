@@ -1,31 +1,21 @@
-import dearpygui.dearpygui as dpg
+from rich.console import Console
+from rich.table import Table
+from rich import box
+from rich.prompt import Prompt as inrich
 
-# dpg.create_context()
-# dpg.create_viewport(title='Custom Title', width=700, height=300)
+import os
+os.system("cls")
+console = Console()
+
+menu = Table(title="Bus Management System", box = box.DOUBLE_EDGE)
+menu.add_column("Key", style="cyan bold", justify="center")
+menu.add_column("Command", style="white italic")
+
+menu.add_row("1", "Book Ticket")
+menu.add_row("2", "Cancel Ticket")
+
+console.print(menu)
 
 
+choice = inrich.ask("Please enter your choice ")
 
-# dpg.setup_dearpygui()
-# dpg.show_viewport()
-# dpg.start_dearpygui()
-# dpg.destroy_context()
-
-
-
-dpg.create_context()
-dpg.create_viewport(title="dearPyGui Window", width=700, height=300)
-dpg.setup_dearpygui()
-dpg.show_viewport()
-
-with dpg.window(label="Example Window") as window:
-    dpg.add_text("Hello, world")
-    dpg.add_button(label="Save")
-    dpg.add_input_text(label="string", default_value="Quick brown fox")
-    dpg.add_slider_float(label="float", default_value=0.273, max_value=1)
-
-dpg.set_primary_window(window, True)
-
-dpg.start_dearpygui()
-dpg.destroy_context()
-
-print(inputer)
