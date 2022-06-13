@@ -24,3 +24,6 @@ menu.add_row("2", "Cancel Ticket")
 
 panel = Panel(Text("Hello", justify="center", style = "bold white"))
 console.print(panel)
+
+texter = Text("hello hello", style = "bold yellow underline")
+console.print(texter)

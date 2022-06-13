@@ -91,18 +91,24 @@ class Account(Person):
 
 #branch/bus system
 class Branch:
-    def __init__(self, location):
+    def __init__(self, location, fare):
         self.code = randint(10000, 99999)
         self.location = location
         self.routes = []
         for i in self.routes:
             self.buses.append(Economy(i))
-            self.buses.append(FirstClass(i))
+            self.buses.append(FirstClass(i, fare))
         self.buses = []
         self.revenue = 0
 
     def branchinfo(self):
         print(f"Branch Code - {self.code}\nBranch Location - {self.location}\nBranch Routes - {self.routes}\nBranch Buses - {self.buses}\nBranch Revenue - {self.revenue}")
+
+    def changefare(self, fare):
+        self.routes = []
+        for i in self.routes:
+            self.buses.append(Economy(i))
+            self.buses.append(FirstClass(i, fare))        
 
 
     def viewroutes(self):
@@ -220,6 +226,8 @@ class Admin:
         branch.routes.append(Route(start, des, fee, dep))
         branch.buses.append(Economy(branch.routes[-1]))
         branch.buses.append(FirstClass(branch.routes[-1]))
+
+
 
 
 
