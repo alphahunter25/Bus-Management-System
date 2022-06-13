@@ -3,7 +3,7 @@ from random import randint
 
 #accounts system
 class Person:
-    def __init__(self, name, age, cnic):
+    def __init__(self, name, age, cnic = str(randint(100000, 999999))):
         self.name = name
         self.age = age
         self.cnic = cnic

@@ -1,7 +1,10 @@
 from rich.console import Console
 from rich.table import Table
 from rich import box
-from rich.prompt import Prompt as inrich
+from rich.prompt import Prompt
+from rich.panel import Panel
+from rich.text import Text
+
 
 import os
 os.system("cls")
@@ -14,8 +17,10 @@ menu.add_column("Command", style="white italic")
 menu.add_row("1", "Book Ticket")
 menu.add_row("2", "Cancel Ticket")
 
-console.print(menu)
+# console.print(menu)
 
 
-choice = inrich.ask("Please enter your choice ")
+# choice = Prompt.ask("Please enter your choice ")
 
+panel = Panel(Text("Hello", justify="center", style = "bold white"))
+console.print(panel)
