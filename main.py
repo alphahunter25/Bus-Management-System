@@ -27,8 +27,8 @@ lahoreBranch = Branch("Lahore", 5000)
 # useAd = Prompt.ask("Please enter your choice ")
 
 # if useAd == "1":
-#     print("so far so good")
-mainchecker = False
+# #     print("so far so good")
+# mainchecker = False
 
 # if
 
@@ -99,18 +99,31 @@ class Menu:
 
                 console.print(Text(f"Route succesfully added", style = "bold underline medium_spring_green"))
 
-            elif adPrompt == "Q":
+            elif adPrompt == "Q" or adPrompt == "q":
                 self.exiter()
+
+            elif adPrompt == "4":
+                looper = False
+                return False
 
             else:
                 console.print(Text("Please enter a valid option", style = "bold red"))
-                return self.admin()
+                # return self.admin()
 
 
 def main():
+    # mainer = False
     menuinit = Menu()
     os.system("cls")
     introout = menuinit.intro()
+    os.system("cls")
+    menuout = menuinit.admin()
+    if menuout == False:
+        # mainer = True
+        os.system("cls")
+        main()
+
+main()
     # if introout == "2":
     #     os.system("cls")
     #     while mainchecker == False:
