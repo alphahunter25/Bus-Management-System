@@ -12,18 +12,6 @@ console = Console()
 
 lahoreBranch = Branch("Lahore", 5000)
 
-# panel = Panel(Text("Welcome to the Bus Management System." , justify="center", style = "bold white"))
-# console.print(panel)
-
-# useAdMenu = Table(title="Would you like to run this program as:", box = box.DOUBLE_EDGE, width=40)
-# useAdMenu.add_column("Key", style="cyan bold", justify="center", width = 1)
-# useAdMenu.add_column("Option", style="white italic")
-# useAdMenu.add_row("1", "A User")
-# useAdMenu.add_row("2", "An Admin")
-
-# console.print(useAdMenu)
-
-
 # useAd = Prompt.ask("Please enter your choice ")
 
 # if useAd == "1":
@@ -58,7 +46,8 @@ class Menu:
             return self.intro()
 
     def admin(self):
-        panel = Panel(Text("Logged in as an Admin" , justify="center", style = "bold cyan"))
+        os.system("cls")
+        panel = Panel(Text("Running the program as an Admin" , justify="center", style = "bold cyan"))
         console.print(panel)
 
 
@@ -68,7 +57,8 @@ class Menu:
         adMenu.add_row("1", "Change the fare of the First Class buses")
         adMenu.add_row("2", "View branch revenue")
         adMenu.add_row("3", "Add another route to this branch")  
-        adMenu.add_row("4", "Go back to the main menu")                
+        adMenu.add_row("4", "Clear the screen")
+        adMenu.add_row("5", "Go back to the main menu")                
 
         console.print(adMenu)
 
@@ -103,12 +93,42 @@ class Menu:
                 self.exiter()
 
             elif adPrompt == "4":
+                # os.system("cls")
+                return self.admin()
+
+            elif adPrompt == "5":
                 looper = False
                 return False
 
+
             else:
                 console.print(Text("Please enter a valid option", style = "bold red"))
-                # return self.admin()
+
+    def user(self):
+        panel = Panel(Text("Running the program as a User" , justify="center", style = "bold cyan"))
+        console.print(panel)
+
+
+        adMenu = Table(title="Please choose one of the following commands", box = box.DOUBLE_EDGE, width=55)
+        adMenu.add_column("Key", style="yellow bold", justify="center", width = 5)
+        adMenu.add_column("Options", style="white italic")
+        adMenu.add_row("1", "Log in ")
+        adMenu.add_row("2", "Create a new account")
+        adMenu.add_row("3", "Go back to the main menu")  
+
+        console.print(adMenu)
+
+        adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
+
+        if adPrompt == "1":
+            name = Prompt.ask("Please choose one of the options or press Q to quit ")
+
+
+
+
+
+
+
 
 
 def main():
@@ -123,7 +143,7 @@ def main():
         os.system("cls")
         main()
 
-main()
+# main()
     # if introout == "2":
     #     os.system("cls")
     #     while mainchecker == False:
