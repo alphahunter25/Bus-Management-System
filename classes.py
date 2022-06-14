@@ -1,5 +1,11 @@
 from random import randint
-
+from rich.console import Console
+from rich.table import Table
+from rich import box
+from rich.prompt import Prompt
+from rich.panel import Panel
+from rich.text import Text
+from main import console
 
 #accounts system
 class Person:
@@ -32,20 +38,34 @@ class Account(Person):
         self.password = password
     
     def userinfo(self):
-        print(f"_User_ : {self.username}\n_Name_ : {self.name}\n_Age_ : {self.age}\n_CNIC_ : {self.cnic}")
+        return (f"_User_ : {self.username}\n_Name_ : {self.name}\n_Age_ : {self.age}\n_CNIC_ : {self.cnic}")
 
     def viewtickets(self):
-        print(f"_User_ : {self.username}\n_Current Bookings_:{self.bookings} ")
+        if len(self.bookings) >0:
+            Menu = Table(title="Current Bookings:", box = box.DOUBLE_EDGE, width=55)
+            Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
+            Menu.add_column("Ticket", style="white italic")
+            for i in range(len(self.bookings)):
+                Menu.add_row(f"{i+1}", f"{self.bookings[i].display()}")
+
+            console.print(Menu)
+
+        else:
+            console.print(Text("You do not currently have any bookings", style = "bold cyan"))
 
     def bookticket(self):
-
+        Menu = Table(title="Please choose one of the following Tickets", box = box.DOUBLE_EDGE, width=55)
+        Menu.add_column("Key", style="yellow bold", justify="center", width = 5)
+        Menu.add_column("Options", style="white italic")
         for i in range(len(self.branch.routes)):
-            print(f"{i+1} : {self.branch.routes[i].display()}")
-        choice = int(input("Enter your choice: "))
-        tier = input(f"Would you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.buses[1].fare} on First Class)\nEnter E for Economy or F for First Class: ")
+            Menu.add_row(f"{i+1}", f"{self.branch.routes[i].display()}")
+
+            console.print(Menu)
+        choice = int(Prompt.ask("Enter your choice: "))
+        tier = Prompt.ask(f"Would you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.buses[1].fare} on First Class)\nEnter E for Economy or F for First Class: ")
         if choice < len(self.branch.routes) and tier == "E":
             if self.branch.buses[i*2].availability == "booked":
-                return "Sorry, this bus is booked."
+                return "Sorry, this bus is fully booked."
             ticket = Ticket(self.branch.buses[i*2-1], self.branch.routes[choice-1])
             self.bookings.append(ticket)
             self.branch.buses[i*2-1].seats.book(self.username)

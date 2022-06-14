@@ -57,16 +57,16 @@ class Menu:
         console.print(panel)
 
 
-        adMenu = Table(title="Please choose one of the following commands", box = box.DOUBLE_EDGE, width=55)
-        adMenu.add_column("Key", style="yellow bold", justify="center", width = 5)
-        adMenu.add_column("Options", style="white italic")
-        adMenu.add_row("1", "Change the fare of the First Class buses")
-        adMenu.add_row("2", "View branch revenue")
-        adMenu.add_row("3", "Add another route to this branch")  
-        adMenu.add_row("4", "Clear the screen")
-        adMenu.add_row("5", "Go back to the main menu")                
+        Menu = Table(title="Please choose one of the following commands", box = box.DOUBLE_EDGE, width=55)
+        Menu.add_column("Key", style="yellow bold", justify="center", width = 5)
+        Menu.add_column("Options", style="white italic")
+        Menu.add_row("1", "Change the fare of the First Class buses")
+        Menu.add_row("2", "View branch revenue")
+        Menu.add_row("3", "Add another route to this branch")  
+        Menu.add_row("4", "Clear the screen")
+        Menu.add_row("5", "Go back to the main menu")                
 
-        console.print(adMenu)
+        console.print(Menu)
 
         looper = True
         while looper:
@@ -116,13 +116,13 @@ class Menu:
         console.print(panel)
 
 
-        adMenu = Table(title="Please choose one of the following commands", box = box.DOUBLE_EDGE, width=55)
-        adMenu.add_column("Key", style="yellow bold", justify="center", width = 5)
-        adMenu.add_column("Options", style="white italic")
-        adMenu.add_row("1", "Log in ")
-        adMenu.add_row("2", "Create a new account")
+        Menu = Table(title="Please choose one of the following commands", box = box.DOUBLE_EDGE, width=55)
+        Menu.add_column("Key", style="yellow bold", justify="center", width = 5)
+        Menu.add_column("Options", style="white italic")
+        Menu.add_row("1", "Log in ")
+        Menu.add_row("2", "Create a new account")
 
-        console.print(adMenu)
+        console.print(Menu)
 
         adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
 
@@ -155,11 +155,39 @@ class Menu:
 
         
     def usersuccess(self, userout):
-        os.system("cls")
-        panel = Panel(Text(f"Logged in successfully as {userout.username}" , justify="center", style = "bold cyan"))
-        console.print(panel)
-
+        def menu():
+            os.system("cls")
             
+            panel = Panel(Text(f"Logged in successfully as {userout.username}" , justify="center", style = "bold cyan"))
+            console.print(panel)
+
+            Menu = Table(title="Please choose one of the following commands", box = box.DOUBLE_EDGE, width=55)
+            Menu.add_column("Key", style="yellow bold", justify="center", width = 5)
+            Menu.add_column("Options", style="white italic")
+            Menu.add_row("1", "Book a ticket ")
+            Menu.add_row("2", "View booked tickets ")
+            Menu.add_row("3", "View your profile information ")
+            Menu.add_row("4", "Change your profile information")
+            Menu.add_row("5", "Clear the screen")
+
+            console.print(Menu)
+
+        menu()
+
+        adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
+
+        if adPrompt == "1":
+            console.print(Text(f"{userout.bookticket()}", style = "bold cyan"))
+
+        if adPrompt == "2":
+            userout.viewtickets()
+
+        if adPrompt == "3":
+            console.print(Text(f"{userout.viewprofile()}", style = "bold cyan"))
+
+
+        
+
 
 
 
