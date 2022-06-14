@@ -12,6 +12,12 @@ console = Console()
 
 lahoreBranch = Branch("Lahore", 5000)
 
+accounts = []
+def clashcheck(user):
+    for i in accounts:
+        if i.username == user:
+            return True
+
 # useAd = Prompt.ask("Please enter your choice ")
 
 # if useAd == "1":
@@ -93,7 +99,6 @@ class Menu:
                 self.exiter()
 
             elif adPrompt == "4":
-                # os.system("cls")
                 return self.admin()
 
             elif adPrompt == "5":
@@ -105,6 +110,8 @@ class Menu:
                 console.print(Text("Please enter a valid option", style = "bold red"))
 
     def user(self):
+        os.system("cls")
+
         panel = Panel(Text("Running the program as a User" , justify="center", style = "bold cyan"))
         console.print(panel)
 
@@ -114,14 +121,46 @@ class Menu:
         adMenu.add_column("Options", style="white italic")
         adMenu.add_row("1", "Log in ")
         adMenu.add_row("2", "Create a new account")
-        adMenu.add_row("3", "Go back to the main menu")  
 
         console.print(adMenu)
 
         adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
 
-        if adPrompt == "1":
-            name = Prompt.ask("Please choose one of the options or press Q to quit ")
+        if adPrompt == "2":
+            username = Prompt.ask("Enter your new username ")
+            password = Prompt.ask("Enter your password ")
+            name = Prompt.ask("Enter your full name ")
+            age = Prompt.ask("Enter your age ")
+            cnic = Prompt.ask("Enter your CNIC Number ")
+
+            while clashcheck(username) == True:
+                username = Prompt.ask("Username already exists. Please enter a new username ")
+
+            tempaccount = Account(username, password, name, age , cnic, lahoreBranch)
+            accounts.append(tempaccount)
+
+            return Text(f"Account created successfully. ", style = "bold underline medium_spring_green")
+        
+        elif adPrompt == "1":
+            def userpasscheck():
+                username = Prompt.ask("Enter your username ")
+                password = Prompt.ask("Enter your password ")
+
+                for i in accounts:
+                    if i.username == username and i.password == password:
+                        return i
+
+                    console.print(Text("Username or password is incorrect", style = "bold red"))
+                    return userpasscheck()
+
+        
+    def usersuccess(self, userout):
+        os.system("cls")
+        panel = Panel(Text(f"Logged in successfully as {userout.username}" , justify="center", style = "bold cyan"))
+        console.print(panel)
+
+            
+
 
 
 

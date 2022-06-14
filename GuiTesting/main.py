@@ -27,3 +27,6 @@ console.print(panel)
 
 texter = Text("hello hello", style = "bold yellow underline")
 console.print(texter)
+
+# panel = Panel(Text("Hello [underline]world[\underline]", justify="center"))
+# console.print(panel)
