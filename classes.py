@@ -250,64 +250,6 @@ class Admin:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def tester():
-    #initializa and run everything
-    branch1 = Branch("Karachi")
-    branch1.branchinfo()
-    branch1.viewroutes()
-    branch1.routes.append("Route 1")
-    branch1.viewroutes()
-
-    person1 = Person("John", 20, "123456789")
-    person1.viewinfo()
-    person1.editinfo("John Doe", 21, "123456789")
-    person1.viewinfo()
-
-    account1 = Account("john", "123", "John Doe", 21, "123456789", branch1)
-    account1.viewinfo()
-    account1.userinfo()
-    account1.bookticket()
-    account1.viewtickets()
-    account1.cancelticket()
-    account1.viewtickets()
-
-
-
-    bus1 = Bus("Route 1")
-    bus1.businfo()
-    bus1.seatinfo(1)
-    bus1.seatinfo(2)
-    bus1.seatinfo(3)
-
-    bus2 = FirstClass("Route 1", 1000)
-    bus2.businfo()
-    bus2.seatinfo(1)
-    bus2.seatinfo(2)
-
-    bus3 = Economy("Route 1")
-    bus3.businfo()
-    bus3.seatinfo(1)
-
-# tester()
-
-
-
     
     
         

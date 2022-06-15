@@ -254,8 +254,7 @@ def main():
             os.system("cls")
             menuinit.usersuccess(accounts[menuout])
         else:
-            console.print(type(menuout))
-            console.print("hmmmmmmmmm")
+            raise Exception("Error")
 # main()
     # if introout == "2":
     #     os.system("cls")
