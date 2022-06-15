@@ -6,6 +6,7 @@ from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
 import os
+import time
 
 os.system("cls")
 console = Console()
@@ -138,20 +139,24 @@ class Menu:
 
             tempaccount = Account(username, password, name, age , cnic, lahoreBranch)
             accounts.append(tempaccount)
-
-            return Text(f"Account created successfully. ", style = "bold underline medium_spring_green")
         
+            return 1
+
+
         elif adPrompt == "1":
             def userpasscheck():
                 username = Prompt.ask("Enter your username ")
                 password = Prompt.ask("Enter your password ")
 
-                for i in accounts:
-                    if i.username == username and i.password == password:
+                for i in range(len(accounts)):
+                    if username == accounts[i].username and password == accounts[i].password:
                         return i
 
                     console.print(Text("Username or password is incorrect", style = "bold red"))
                     return userpasscheck()
+
+            return userpasscheck()
+
 
         
     def usersuccess(self, userout):
@@ -169,6 +174,7 @@ class Menu:
             Menu.add_row("3", "View your profile information ")
             Menu.add_row("4", "Change your profile information")
             Menu.add_row("5", "Clear the screen")
+            Menu.add_row("6", "Go back to the main menu")
 
             console.print(Menu)
 
@@ -179,13 +185,33 @@ class Menu:
         if adPrompt == "1":
             console.print(Text(f"{userout.bookticket()}", style = "bold cyan"))
 
-        if adPrompt == "2":
+        elif adPrompt == "2":
             userout.viewtickets()
 
-        if adPrompt == "3":
+        elif adPrompt == "3":
             console.print(Text(f"{userout.viewprofile()}", style = "bold cyan"))
 
+        elif adPrompt == "4":
+            sure = Prompt.ask("Are you sure you want to change your username and password? (Y/N) ")
+            if sure == "Y" or sure == "y":
+                newname = Prompt.ask("Enter your new username ")
+                newpassword = Prompt.ask("Enter your new password ")
+                userout.changeinfo(newname, newpassword)
+                console.print(Text(f"Your profile information has been changed", style = "bold cyan"))
+                menu()
 
+            elif sure == "N" or sure == "n":
+                menu()
+
+        elif adPrompt == "5":
+            menu()
+
+        elif adPrompt == "6":
+            return False
+
+        elif adPrompt == "Q" or adPrompt == "q":
+            self.exiter()
+        
         
 
 
@@ -204,12 +230,32 @@ def main():
     os.system("cls")
     introout = menuinit.intro()
     os.system("cls")
-    menuout = menuinit.admin()
-    if menuout == False:
-        # mainer = True
-        os.system("cls")
-        main()
+    if introout == "2":
+        menuout = menuinit.admin()
+        if menuout == False:
+            # mainer = True
+            os.system("cls")
+            main()
 
+    elif introout == "1":
+        menuout = menuinit.user()
+        if menuout == 1:
+            console.print(Text("ACCOUNT CREATED SUCCESSFULLY . . . please wait", style = "bold cyan underline"))
+            time.sleep(3)
+            main()
+            # userout = menuinit.user()
+            # if type(userout) == Account:
+            #     menuinit.usersuccess(userout)
+
+            # else:
+            #     console.print(type(userout))
+            #     console.print("pain")
+        elif type(menuout) ==  int:
+            os.system("cls")
+            menuinit.usersuccess(accounts[menuout])
+        else:
+            console.print(type(menuout))
+            console.print("hmmmmmmmmm")
 # main()
     # if introout == "2":
     #     os.system("cls")

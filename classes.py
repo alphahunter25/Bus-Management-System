@@ -5,7 +5,7 @@ from rich import box
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
-from main import console
+# from main import console
 
 #accounts system
 class Person:
