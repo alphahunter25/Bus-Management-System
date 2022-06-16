@@ -7,6 +7,7 @@ from rich.panel import Panel
 from rich.text import Text
 # from main import console
 
+
 #accounts system
 class Person:
     def __init__(self, name, age, cnic = str(randint(100000, 999999))):
@@ -125,10 +126,9 @@ class Branch:
         print(f"Branch Code - {self.code}\nBranch Location - {self.location}\nBranch Routes - {self.routes}\nBranch Buses - {self.buses}\nBranch Revenue - {self.revenue}")
 
     def changefare(self, fare):
-        self.routes = []
         for i in self.routes:
-            self.buses.append(Economy(i))
-            self.buses.append(FirstClass(i, fare))        
+            if type(i) == FirstClass:
+                i.fare = fare      
 
 
     def viewroutes(self):
@@ -193,7 +193,7 @@ class Economy(Bus):
 
 
 class FirstClass(Bus):
-    def __init__(self, route, fare):
+    def __init__(self, route, fare = 1000):
         super().__init__(route)
         self.fare = fare
         self.type = "First Class"
@@ -236,16 +236,18 @@ class Ticket:
 
 #admin
 class Admin:
-    def changefares(self, bus):
-        bus.setfare(int(input("Enter the new fare: ")))
+    # def changefares(self, bus):
+    #     bus.setfare(int(input("Enter the new fare: ")))
 
     def viewrevenue(self, branch):
         print(f"{branch.location} has made ${branch.revenue}")
 
     def addroute(self,branch, start, des, fee, dep):
         branch.routes.append(Route(start, des, fee, dep))
-        branch.buses.append(Economy(branch.routes[-1]))
-        branch.buses.append(FirstClass(branch.routes[-1]))
+        temp = Economy(branch.routes[-1])
+        branch.buses.append(temp)
+        temp = FirstClass(branch.routes[-1])
+        branch.buses.append(temp)
 
 
 

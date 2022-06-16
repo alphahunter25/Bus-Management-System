@@ -13,6 +13,7 @@ console = Console()
 
 lahoreBranch = Branch("Lahore", 5000)
 
+
 accounts = []
 def clashcheck(user):
     for i in accounts:
@@ -43,7 +44,7 @@ class Menu:
         useAdMenu.add_row("2", "An Admin")
 
         console.print(useAdMenu)
-        useadPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
+        useadPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
         if useadPrompt == "1" or useadPrompt == "2":
             return useadPrompt
         elif useadPrompt == "Q":
@@ -71,28 +72,53 @@ class Menu:
 
         looper = True
         while looper:
-            adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
+            adPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
 
             if adPrompt == "1":
-                newFare = Prompt.ask("Please enter the new fare ")
-                for i in lahoreBranch.buses:
-                    if i.busType == "First Class":
-                        i.fare = newFare
+                if len(lahoreBranch.routes) != 0:
+                    def intcheck():
+                        try:
+                            newFare = int(Prompt.ask("Please enter the new fare "))
+                            return newFare
+
+                        except:
+                            console.print(Text("PLEASE ENTER A NUMBER", style = "yellow bold"))
+                            intcheck()
+
+                    newFare = intcheck()
+
+                    lahoreBranch.changefare(newFare)
+
+                else:
+                    console.print(Text("No bus currently added . . . use command number 3 to add a route first ", style = "yellow"))
 
             elif adPrompt == "2":
                 revenuecalc = lahoreBranch.revenue 
                 console.print(Text(f"This branch has made Rs{revenuecalc} since it was made.", style = "bold underline medium_spring_green"))
 
             elif adPrompt == "3":
-                start = Prompt.ask("Please enter the starting point of the new route ")
+                start = Prompt.ask("\nPlease enter the starting point of the new route ")
                 end = Prompt.ask("Please enter the destination of the new route ")
-                fare = Prompt.ask("Please enter the fare of the new route ")
+                def intcheck():
+                    try:
+                        newFare = int(Prompt.ask("Please enter the fare "))
+                        return newFare
+
+                    except:
+                        console.print(Text("PLEASE ENTER A NUMBER", style = "yellow bold"))
+                        intcheck()
+
+                fare = intcheck()
                 time = Prompt.ask("Please enter the departure time of the new route ")
 
                 newRoute = Route(start, end, fare, time)
                 lahoreBranch.routes.append(newRoute)
-                lahoreBranch.buses += Economy(newRoute)
-                lahoreBranch.buses += FirstClass(newRoute, lahoreBranch.buses[1])
+                lahoreBranch.buses.append(Economy(newRoute))
+                if len(lahoreBranch.routes) == 1:
+                    lahoreBranch.buses.append(FirstClass(newRoute))
+                    
+                else:
+                    lahoreBranch.buses.append(FirstClass(newRoute, lahoreBranch.buses[-2].fare))
 
                 console.print(Text(f"Route succesfully added", style = "bold underline medium_spring_green"))
 
@@ -128,14 +154,14 @@ class Menu:
         adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
 
         if adPrompt == "2":
-            username = Prompt.ask("Enter your new username ")
+            username = Prompt.ask("\nEnter your new username ")
             password = Prompt.ask("Enter your password ")
             name = Prompt.ask("Enter your full name ")
             age = Prompt.ask("Enter your age ")
             cnic = Prompt.ask("Enter your CNIC Number ")
 
             while clashcheck(username) == True:
-                username = Prompt.ask("Username already exists. Please enter a new username ")
+                username = Prompt.ask("\nUsername already exists. Please enter a new username ")
 
             tempaccount = Account(username, password, name, age , cnic, lahoreBranch)
             accounts.append(tempaccount)
@@ -145,14 +171,19 @@ class Menu:
 
         elif adPrompt == "1":
             def userpasscheck():
-                username = Prompt.ask("Enter your username ")
+                username = Prompt.ask("\nEnter your username or press 'm' to go back to the main menu if you don't have an account ")
+                if username == "m" or username == "M":
+                    return "m"
                 password = Prompt.ask("Enter your password ")
+
+
 
                 for i in range(len(accounts)):
                     if username == accounts[i].username and password == accounts[i].password:
                         return i
 
-                    console.print(Text("Username or password is incorrect", style = "bold red"))
+                else:
+                    console.print(Text("Username or password is incorrect", style = "bold red underline"))
                     return userpasscheck()
 
             return userpasscheck()
@@ -180,7 +211,7 @@ class Menu:
 
         menu()
 
-        adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
+        adPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
 
         if adPrompt == "1":
             console.print(Text(f"{userout.bookticket()}", style = "bold cyan"))
@@ -253,6 +284,9 @@ def main():
         elif type(menuout) ==  int:
             os.system("cls")
             menuinit.usersuccess(accounts[menuout])
+
+        elif menuout == "m":
+            main()
         else:
             console.print(Text("UNKNOWN ERROR . . . PLEASE RESTART", style = "bold red underline"))
             time.sleep(3)
