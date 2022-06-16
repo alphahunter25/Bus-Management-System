@@ -5,6 +5,8 @@ from rich import box
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
+
+console = Console()
 # from main import console
 
 
@@ -39,7 +41,7 @@ class Account(Person):
         self.password = password
     
     def userinfo(self):
-        return (f"_User_ : {self.username}\n_Name_ : {self.name}\n_Age_ : {self.age}\n_CNIC_ : {self.cnic}")
+        return (f"_Username_ : {self.username}\n_Name_ : {self.name}\n_Age_ : {self.age}\n_CNIC_ : {self.cnic}")
 
     def viewtickets(self):
         if len(self.bookings) >0:

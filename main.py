@@ -20,18 +20,21 @@ def clashcheck(user):
         if i.username == user:
             return True
 
-# useAd = Prompt.ask("Please enter your choice ")
-
-# if useAd == "1":
-# #     print("so far so good")
-# mainchecker = False
-
-# if
 
 class Menu:
     def exiter(self):
         console.print(Text("Thank you for using the Bus Management System.", style = "bold red"))
+        time.sleep(3)
         exit()
+
+    def intcheck(self, n):
+        try:
+            age = int(Prompt.ask(n))
+            return age
+
+        except:
+            console.print(Text("PLEASE ENTER A NUMBER", style = "yellow bold"))
+            return self.intcheck(n)
 
     def intro(self):
         panel = Panel(Text("Welcome to the Bus Management System." , justify="center", style = "bold cyan"))
@@ -76,17 +79,7 @@ class Menu:
 
             if adPrompt == "1":
                 if len(lahoreBranch.routes) != 0:
-                    def intcheck():
-                        try:
-                            newFare = int(Prompt.ask("Please enter the new fare "))
-                            return newFare
-
-                        except:
-                            console.print(Text("PLEASE ENTER A NUMBER", style = "yellow bold"))
-                            intcheck()
-
-                    newFare = intcheck()
-
+                    newFare = self.intcheck("Please enter the new fare ")
                     lahoreBranch.changefare(newFare)
 
                 else:
@@ -99,16 +92,7 @@ class Menu:
             elif adPrompt == "3":
                 start = Prompt.ask("\nPlease enter the starting point of the new route ")
                 end = Prompt.ask("Please enter the destination of the new route ")
-                def intcheck():
-                    try:
-                        newFare = int(Prompt.ask("Please enter the fare "))
-                        return newFare
-
-                    except:
-                        console.print(Text("PLEASE ENTER A NUMBER", style = "yellow bold"))
-                        intcheck()
-
-                fare = intcheck()
+                fare = self.intcheck("Please enter the fare ")
                 time = Prompt.ask("Please enter the departure time of the new route ")
 
                 newRoute = Route(start, end, fare, time)
@@ -137,6 +121,7 @@ class Menu:
                 console.print(Text("Please enter a valid option", style = "bold red"))
 
     def user(self):
+        looper = True
         os.system("cls")
 
         panel = Panel(Text("Running the program as a User" , justify="center", style = "bold cyan"))
@@ -148,45 +133,70 @@ class Menu:
         Menu.add_column("Options", style="white italic")
         Menu.add_row("1", "Log in ")
         Menu.add_row("2", "Create a new account")
-
+        Menu.add_row("3", "Clear screen ")
         console.print(Menu)
 
-        adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
+        while looper:
+            adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
 
-        if adPrompt == "2":
-            username = Prompt.ask("\nEnter your new username ")
-            password = Prompt.ask("Enter your password ")
-            name = Prompt.ask("Enter your full name ")
-            age = Prompt.ask("Enter your age ")
-            cnic = Prompt.ask("Enter your CNIC Number ")
-
-            while clashcheck(username) == True:
-                username = Prompt.ask("\nUsername already exists. Please enter a new username ")
-
-            tempaccount = Account(username, password, name, age , cnic, lahoreBranch)
-            accounts.append(tempaccount)
-        
-            return 1
-
-
-        elif adPrompt == "1":
-            def userpasscheck():
-                username = Prompt.ask("\nEnter your username or press 'm' to go back to the main menu if you don't have an account ")
-                if username == "m" or username == "M":
-                    return "m"
+            if adPrompt == "2":
+                username = Prompt.ask("\nEnter your new username ")
+                while username == "m" or username == "M":
+                    username = Prompt.ask("\nPlease choose another username as 'm' is already an assigned key ") 
                 password = Prompt.ask("Enter your password ")
+                name = Prompt.ask("Enter your full name ")
 
 
 
-                for i in range(len(accounts)):
-                    if username == accounts[i].username and password == accounts[i].password:
-                        return i
+                age = self.intcheck("Enter your age ")       
+                cnic = self.intcheck("Enter your cnic number ")
 
-                else:
-                    console.print(Text("Username or password is incorrect", style = "bold red underline"))
-                    return userpasscheck()
+                while clashcheck(username) == True:
+                    username = Prompt.ask("\nUsername already exists. Please enter a new username ")
 
-            return userpasscheck()
+                tempaccount = Account(username, password, name, age , cnic, lahoreBranch)
+                accounts.append(tempaccount)
+
+                console.print(Text("ACCOUNT CREATED SUCCESSFULLY\n\n", style = "bold cyan underline"))
+
+
+
+            elif adPrompt == "1":
+                def userpasscheck():
+                    username = Prompt.ask("\nEnter your username ")
+
+                    password = Prompt.ask("Enter your password ")
+
+
+
+                    for i in range(len(accounts)):
+                        if username == accounts[i].username and password == accounts[i].password:
+                            return i
+
+                    else:
+                        console.print(Text("Username or password is incorrect\n ", style = "bold red underline"))
+
+
+                a = userpasscheck()
+                if type(a) == int:
+                    looper = False
+                    return a
+
+
+
+            elif adPrompt == "3":
+                return self.user()
+
+            elif adPrompt == "Q" or adPrompt == "q":
+                self.exiter()
+
+            
+
+            else:
+                console.print(Text("INVALID OPTION\n", style = "bold red underline"))
+
+
+             
 
 
         
@@ -210,40 +220,42 @@ class Menu:
             console.print(Menu)
 
         menu()
+        looper = True
+        while looper:
+            adPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
 
-        adPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
+            if adPrompt == "1":
+                console.print(Text(f"{userout.bookticket()}", style = "bold cyan"))
 
-        if adPrompt == "1":
-            console.print(Text(f"{userout.bookticket()}", style = "bold cyan"))
+            elif adPrompt == "2":
+                userout.viewtickets()
 
-        elif adPrompt == "2":
-            userout.viewtickets()
+            elif adPrompt == "3":
+                console.print(Text(f"{userout.userinfo()}", style = "cyan"))
 
-        elif adPrompt == "3":
-            console.print(Text(f"{userout.viewprofile()}", style = "bold cyan"))
+            elif adPrompt == "4":
+                sure = Prompt.ask("Are you sure you want to change your username and password? (Y/N) ")
+                if sure == "Y" or sure == "y":
+                    newname = Prompt.ask("Enter your new username ")
+                    newpassword = Prompt.ask("Enter your new password ")
+                    userout.changeinfo(newname, newpassword)
+                    console.print(Text(f"Your profile information has been changed and will be applied on your next login ", style = "bold cyan"))
 
-        elif adPrompt == "4":
-            sure = Prompt.ask("Are you sure you want to change your username and password? (Y/N) ")
-            if sure == "Y" or sure == "y":
-                newname = Prompt.ask("Enter your new username ")
-                newpassword = Prompt.ask("Enter your new password ")
-                userout.changeinfo(newname, newpassword)
-                console.print(Text(f"Your profile information has been changed", style = "bold cyan"))
+
+                elif sure == "N" or sure == "n":
+                    pass
+
+            elif adPrompt == "5":
                 menu()
 
-            elif sure == "N" or sure == "n":
-                menu()
+            elif adPrompt == "6":
+                return False
 
-        elif adPrompt == "5":
-            menu()
+            elif adPrompt == "Q" or adPrompt == "q":
+                self.exiter()
+            
 
-        elif adPrompt == "6":
-            return False
 
-        elif adPrompt == "Q" or adPrompt == "q":
-            self.exiter()
-        
-        
 
 
 
@@ -256,47 +268,34 @@ class Menu:
 
 
 def main():
-    # mainer = False
+    # user / admin selection
     menuinit = Menu()
+    
     os.system("cls")
     introout = menuinit.intro()
+    
     os.system("cls")
-    if introout == "2":
-        menuout = menuinit.admin()
+    if introout == "2": #choosing admin
+        menuout = menuinit.admin() 
         if menuout == False:
-            # mainer = True
+
             os.system("cls")
             main()
 
-    elif introout == "1":
+
+    elif introout == "1": #choosing user
         menuout = menuinit.user()
-        if menuout == 1:
-            console.print(Text("ACCOUNT CREATED SUCCESSFULLY . . . please wait", style = "bold cyan underline"))
-            time.sleep(3)
-            main()
-            # userout = menuinit.user()
-            # if type(userout) == Account:
-            #     menuinit.usersuccess(userout)
-
-            # else:
-            #     console.print(type(userout))
-            #     console.print("pain")
-        elif type(menuout) ==  int:
+        if type(menuout) ==  int:#checking if signin was successful
+           
             os.system("cls")
-            menuinit.usersuccess(accounts[menuout])
+            usermenu = menuinit.usersuccess(accounts[menuout]) #user menu
+            if usermenu == False: 
+                main()
 
-        elif menuout == "m":
-            main()
         else:
             console.print(Text("UNKNOWN ERROR . . . PLEASE RESTART", style = "bold red underline"))
             time.sleep(3)
             exit()
-
-# main()
-    # if introout == "2":
-    #     os.system("cls")
-    #     while mainchecker == False:
-    #         menuinit.admin()
 
 
 
