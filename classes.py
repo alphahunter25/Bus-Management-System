@@ -60,37 +60,49 @@ class Account(Person):
         Menu = Table(title="Please choose one of the following Tickets", box = box.DOUBLE_EDGE, width=55)
         Menu.add_column("Key", style="yellow bold", justify="center", width = 5)
         Menu.add_column("Options", style="white italic")
+
         for i in range(len(self.branch.routes)):
             Menu.add_row(f"{i+1}", f"{self.branch.routes[i].display()}")
 
-            console.print(Menu)
+        console.print(Menu)
+
         choice = int(Prompt.ask("Enter your choice: "))
         tier = Prompt.ask(f"Would you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.buses[1].fare} on First Class)\nEnter E for Economy or F for First Class: ")
-        if choice < len(self.branch.routes) and tier == "E":
+        if choice-1 < len(self.branch.routes) and (tier == "E" or tier == "e"):
             if self.branch.buses[i*2].availability == "booked":
                 return "Sorry, this bus is fully booked."
             ticket = Ticket(self.branch.buses[i*2-1], self.branch.routes[choice-1])
             self.bookings.append(ticket)
-            self.branch.buses[i*2-1].seats.book(self.username)
-            self.branch.buses[i*2-1].setavailibility()
+            availableseat = 0
+            for i in range(len(self.branch.buses[i*2-1].seats)):
+                if self.branch.buses[i*2-1].seats[i].availability == "Available":
+                    availableseat += i
+                    break
+            self.branch.buses[i*2-1].seats[availableseat].book(self.username)
+            self.branch.buses[i*2-1].seatavailability()
             self.branch.revenue += self.branch.routes[choice-1].fare
             return f"Ticket booked successfully."
             
 
-        elif choice < len(self.branch.routes) and tier == "F":
-            if self.branch.buses[i*2].availability == "booked":
+        elif choice-1 < len(self.branch.routes) and (tier == "F" or tier == "f"):
+            if self.branch.buses[i*2].seats.availability == "booked":
                 return "Sorry, this bus is booked."
             ticket = Ticket(self.branch.buses[i*2], self.branch.routes[choice-1])
-            self.branch.buses[i*2].seats.book(self.username)
-            self.branch.buses[i*2].setavailibility()
+            availableseat = 0
+            for i in range(len(self.branch.buses[i*2].seats)):
+                if self.branch.buses[i*2][i].availability == "Available":
+                    availableseat += i
+                    break
+            self.branch.buses[i*2].seats[availableseat].book(self.username)
+            self.branch.buses[i*2].seatavailability()
             self.bookings.append(ticket)
             self.branch.revenue += self.branch.routes[choice-1].fare
             self.branch.revenue += self.branch.buses[i*2].fare
             return f"Ticket booked successfully."
 
         else:
-            print("Invalid choice.")
-            return False
+            return "Invalid choice."
+
 
     def cancelticket(self):
         for i in range(len(self.bookings)):
@@ -100,7 +112,7 @@ class Account(Person):
             for bus in self.branch.buses:
                 if bus.license == self.bookings[choice-1].bus.license:
                     bus.seats.cancel(self.username)
-                    bus.setavailibility()
+                    bus.seatavailability()
 
             self.bookings.pop(choice-1)
             return f"Ticket cancelled successfully."
@@ -158,7 +170,7 @@ class Bus:
 
         for i in range(self.numseats):
             self.seats.append(Seat())
-        self.availablility = "Available"
+        self.availability = "Available"
 
         self.availableseats = self.seats.copy()
 
@@ -214,22 +226,21 @@ class Route:
     def __init__(self, start, destination, fee, departure):
         self.start = start
         self.destination = destination
-        self.fee = fee
+        self.fare = fee
         self.departure = departure
     
     def display(self):
-        return f"{self.start} to {self.destination}\nFee: {self.fee}\nDeparture: {self.departure}"
+        return f"{self.start} to {self.destination}\nFee: {self.fare}\nDeparture: {self.departure}"
 
 
 
 
 #tickets
 class Ticket:
-    def __init__(self, route, bus, seatnum):
+    def __init__(self, route, bus):
         self.route = route
         self.bus = bus
-        self.type = self.bus.type
-        self.seatnum = seatnum
+
 
     def display(self):
         return f"{self.route.display()}\n\nTier: {self.bus.tier}\nLicense Plate: {self.bus.license}\nSeat Number: {self.seatnum}"

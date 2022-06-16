@@ -37,6 +37,7 @@ class Menu:
             return self.intcheck(n)
 
     def intro(self):
+        os.system("cls")        
         panel = Panel(Text("Welcome to the Bus Management System." , justify="center", style = "bold cyan"))
         console.print(panel)
 
@@ -47,14 +48,18 @@ class Menu:
         useAdMenu.add_row("2", "An Admin")
 
         console.print(useAdMenu)
-        useadPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
-        if useadPrompt == "1" or useadPrompt == "2":
-            return useadPrompt
-        elif useadPrompt == "Q":
-            self.exiter()
-        else:
-            console.print(Text("Please enter a valid option", style = "bold red"))
-            return self.intro()
+
+        looper = True
+        while looper:
+            useadPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
+            if useadPrompt == "1" or useadPrompt == "2":
+                looper = False
+                return useadPrompt
+            elif useadPrompt == "Q" or useadPrompt == "q":
+                self.exiter()
+            else:
+                console.print(Text("Please enter a valid option", style = "bold red"))
+
 
     def admin(self):
         os.system("cls")
@@ -225,13 +230,13 @@ class Menu:
             adPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
 
             if adPrompt == "1":
-                console.print(Text(f"{userout.bookticket()}", style = "bold cyan"))
+                console.print(Text(userout.bookticket(), style = "bold cyan"))
 
             elif adPrompt == "2":
                 userout.viewtickets()
 
             elif adPrompt == "3":
-                console.print(Text(f"{userout.userinfo()}", style = "cyan"))
+                console.print(Text(userout.userinfo(), style = "cyan"))
 
             elif adPrompt == "4":
                 sure = Prompt.ask("Are you sure you want to change your username and password? (Y/N) ")
@@ -271,7 +276,6 @@ def main():
     # user / admin selection
     menuinit = Menu()
     
-    os.system("cls")
     introout = menuinit.intro()
     
     os.system("cls")
