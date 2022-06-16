@@ -255,6 +255,9 @@ def main():
             menuinit.usersuccess(accounts[menuout])
         else:
             console.print(Text("UNKNOWN ERROR . . . PLEASE RESTART", style = "bold red underline"))
+            time.sleep(3)
+            exit()
+
 # main()
     # if introout == "2":
     #     os.system("cls")
