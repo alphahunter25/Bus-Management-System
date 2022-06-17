@@ -27,8 +27,8 @@ console.print(panel)
 
 texter = Text("hello hello", style = "bold yellow underline")
 console.print(texter)
-
-panel = Text("Hello [not underline]world[/not underline]", justify="center", style = "underline")
+neighbor = "bruh"
+panel = Text(f"Hello {neighbor}", justify="center", style = "underline")
 console.print(panel)
 cnic = 100000
 console.print(Text(f"CNIC : [not bold]{str(cnic)}[/not bold]", style = "bold"))

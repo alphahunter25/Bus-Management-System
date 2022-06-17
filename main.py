@@ -35,7 +35,7 @@ class Menu:
 
         with open("data.pickle", "rb") as f:
             datas = pickle.load(f)
-            print(datas["branch"].routes[0].display())
+            print(datas)
         
         time.sleep(3)
         # exit()
@@ -87,8 +87,10 @@ class Menu:
         Menu.add_column("Options", style="white italic")
         Menu.add_row("1", "Change the fare of the First Class buses")
         Menu.add_row("2", "View branch revenue")
-        Menu.add_row("3", "Add another route to this branch")  
-        Menu.add_row("4", "Go back to the main menu")                
+        Menu.add_row("3", "Add another route to this branch")
+        Menu.add_row("4", "View all routes")  
+        Menu.add_row("5", "Depart all buses on a route")
+        Menu.add_row("6", "Go back to the main menu")                
 
         console.print(Menu)
 
@@ -131,10 +133,45 @@ class Menu:
             elif adPrompt == "c" or adPrompt == "C":
                 return self.admin()
 
+
             elif adPrompt == "4":
+                if len(data["branch"].routes) != 0:
+                    Menu = Table(title="Current registered routes : ", box = box.DOUBLE_EDGE, width=55, show_lines = True)
+                    Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
+                    Menu.add_column("Route", style="white italic")
+
+                    for i in range(len(data["branch"].routes)):
+                        Menu.add_row(f"{i+1}", data["branch"].routes[i].display())
+
+                    console.print(Menu)    
+
+                else:
+                    console.print(Text("No routes currently added . . . use command number 3 to add a route first ", style = "yellow"))            
+
+            elif adPrompt == "5":
+                Menu = Table(title="Current registered routes : ", box = box.DOUBLE_EDGE, width=55, show_lines = True)
+                Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
+                Menu.add_column("Route", style="white italic")
+
+                branch = data["branch"]
+                for i in range(len(data["branch"].routes)):
+                    Menu.add_row(f"{i+1}", f"{branch.routes[i].display()}")
+
+                console.print(Menu) 
+
+                route = self.intcheck("Please enter the route number you want to depart ")
+                if route <= len(data["branch"].routes):
+                    for acc in data["accounts"]:
+                        for tickets in acc.bookings:
+                            if tickets.route == data["branch"].routes[route-1]:
+                                acc.bookings.remove(tickets)
+
+                    curr = data["branch"].routes[route-1]
+                    console.print(Text(f"All buses on route from {curr.start} to {curr.destination} have departed", style = "bold underline cyan"))
+
+            elif adPrompt == "6":
                 looper = False
                 return False
-
 
             else:
                 console.print(Text("Please enter a valid option", style = "bold red"))

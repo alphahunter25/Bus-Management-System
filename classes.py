@@ -94,7 +94,7 @@ class Account(Person):
         Menu.add_column("Options", style="white italic")
 
         for i in range(len(self.branch.routes)):
-            Menu.add_row(f"{i+1}", f"{self.branch.routes[i].display()}")
+            Menu.add_row(f"{i+1}", self.branch.routes[i].display())
 
         console.print(Menu)
 
@@ -179,7 +179,9 @@ class Branch:
     def changefare(self, fare):
         for i in self.routes:
             if type(i) == FirstClass:
-                i.fare = fare      
+                i.fare = fare 
+
+        self.firstfare = fare     
 
 
     def viewroutes(self):
