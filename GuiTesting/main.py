@@ -28,5 +28,7 @@ console.print(panel)
 texter = Text("hello hello", style = "bold yellow underline")
 console.print(texter)
 
-# panel = Panel(Text("Hello [underline]world[\underline]", justify="center"))
-# console.print(panel)
+panel = Text("Hello [not underline]world[/not underline]", justify="center", style = "underline")
+console.print(panel)
+cnic = 100000
+console.print(Text(f"CNIC : [not bold]{str(cnic)}[/not bold]", style = "bold"))

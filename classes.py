@@ -9,6 +9,14 @@ from rich.text import Text
 console = Console()
 # from main import console
 
+def intcheck(n):
+    try:
+        age = int(Prompt.ask(n))
+        return age
+
+    except:
+        console.print(Text("PLEASE ENTER A NUMBER", style = "yellow bold"))
+        return intcheck(n)
 
 #accounts system
 class Person:
@@ -36,12 +44,18 @@ class Account(Person):
         self.cnic = cnic
         self.bookings = []
 
-    def changeinfo(self, username, password):
+    def changeinfo(self, username, password, age, cnic):
         self.username = username
         self.password = password
+        self.age = age
+        self.cnic = cnic
     
     def userinfo(self):
-        return (f"_Username_ : {self.username}\n_Name_ : {self.name}\n_Age_ : {self.age}\n_CNIC_ : {self.cnic}")
+        console.print(Text("\nAccount information : ", style = "green bold underline"))
+        console.print(Text("Name : ", style = "green"), Text(self.name, style = "white"))
+        console.print(Text("Age : ", style = "green"), Text(str(self.age), style = "white"))
+        console.print(Text("CNIC : ", style = "green"), Text(str(self.cnic), style = "white"))
+
 
     def viewtickets(self):
         if len(self.bookings) >0:
@@ -57,6 +71,8 @@ class Account(Person):
             console.print(Text("You do not currently have any bookings", style = "bold cyan"))
 
     def bookticket(self):
+        if len(self.branch.routes) == 0:
+            return "No buses currently available"
         def busselector(route, type):
             for bus in range(len(self.branch.buses)):
                 if self.branch.buses[bus].route == route and self.branch.buses[bus].type == type:
@@ -72,8 +88,9 @@ class Account(Person):
 
         console.print(Menu)
 
-        choice = int(Prompt.ask("Enter your choice: "))
-        if choice > len(self.branch.routes) or choice < 1:
+
+        choice = intcheck("Enter your choice: ")
+        if choice < 0 or choice > len(self.branch.routes):
             return "Invalid choice"
         tier = Prompt.ask(f"Would you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.buses[1].fare} on First Class)\nEnter E for Economy or F for First Class: ")
         if choice-1 < len(self.branch.routes) and (tier == "E" or tier == "e"):

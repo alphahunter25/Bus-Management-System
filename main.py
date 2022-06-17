@@ -30,10 +30,12 @@ class Menu:
     def intcheck(self, n):
         try:
             age = int(Prompt.ask(n))
+            
             return age
 
         except:
             console.print(Text("PLEASE ENTER A NUMBER", style = "yellow bold"))
+            
             return self.intcheck(n)
 
     def intro(self):
@@ -239,14 +241,17 @@ class Menu:
                 userout.viewtickets()
 
             elif adPrompt == "3":
-                console.print(Text(userout.userinfo(), style = "cyan"))
+                userout.userinfo()
 
             elif adPrompt == "4":
                 sure = Prompt.ask("Are you sure you want to change your username and password? (Y/N) ")
                 if sure == "Y" or sure == "y":
-                    newname = Prompt.ask("Enter your new username ")
+                    newusername = Prompt.ask("Enter your new username ")
                     newpassword = Prompt.ask("Enter your new password ")
-                    userout.changeinfo(newname, newpassword)
+                    newage = self.intcheck("Enter your new age ")
+                    newcnic = self.intcheck("Enter your new cnic number ")
+
+                    userout.changeinfo(newusername, newpassword, newage, newcnic)
                     console.print(Text(f"Your profile information has been changed and will be applied on your next login ", style = "bold cyan"))
 
 
