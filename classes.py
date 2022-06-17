@@ -100,7 +100,7 @@ class Account(Person):
 
 
         choice = intcheck("Enter your choice: ")
-        if choice < 0 or choice > len(self.branch.routes):
+        if choice <= 0 or choice > len(self.branch.routes):
             return "Invalid choice"
         tier = Prompt.ask(f"Would you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.buses[1].fare} on First Class)\nEnter E for Economy or F for First Class: ")
         if choice-1 < len(self.branch.routes) and (tier == "E" or tier == "e"):

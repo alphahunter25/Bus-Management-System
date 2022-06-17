@@ -149,25 +149,29 @@ class Menu:
                     console.print(Text("No routes currently added . . . use command number 3 to add a route first ", style = "yellow"))            
 
             elif adPrompt == "5":
-                Menu = Table(title="Current registered routes : ", box = box.DOUBLE_EDGE, width=55, show_lines = True)
-                Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
-                Menu.add_column("Route", style="white italic")
+                if len(data["branch"].routes) != 0:
+                    Menu = Table(title="Current registered routes : ", box = box.DOUBLE_EDGE, width=55, show_lines = True)
+                    Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
+                    Menu.add_column("Route", style="white italic")
 
-                branch = data["branch"]
-                for i in range(len(data["branch"].routes)):
-                    Menu.add_row(f"{i+1}", f"{branch.routes[i].display()}")
+                    branch = data["branch"]
+                    for i in range(len(data["branch"].routes)):
+                        Menu.add_row(f"{i+1}", f"{branch.routes[i].display()}")
 
-                console.print(Menu) 
+                    console.print(Menu) 
 
-                route = self.intcheck("Please enter the route number you want to depart ")
-                if route <= len(data["branch"].routes):
-                    for acc in data["accounts"]:
-                        for tickets in acc.bookings:
-                            if tickets.route == data["branch"].routes[route-1]:
-                                acc.bookings.remove(tickets)
+                    route = self.intcheck("Please enter the route number you want to depart ")
+                    if route <= len(data["branch"].routes):
+                        for acc in data["accounts"]:
+                            for tickets in acc.bookings:
+                                if tickets.route == data["branch"].routes[route-1]:
+                                    acc.bookings.remove(tickets)
 
-                    curr = data["branch"].routes[route-1]
-                    console.print(Text(f"All buses on route from {curr.start} to {curr.destination} have departed", style = "bold underline cyan"))
+                        curr = data["branch"].routes[route-1]
+                        console.print(Text(f"All buses on route from {curr.start} to {curr.destination} have departed", style = "bold underline cyan"))
+
+                else:
+                    console.print(Text("No routes currently added . . . use command number 3 to add a route first ", style = "yellow"))   
 
             elif adPrompt == "6":
                 looper = False
@@ -273,9 +277,10 @@ class Menu:
             Menu.add_column("Options", style="white italic")
             Menu.add_row("1", "Book a ticket ")
             Menu.add_row("2", "View booked tickets ")
-            Menu.add_row("3", "View your profile information ")
-            Menu.add_row("4", "Change your profile information")
-            Menu.add_row("5", "Go back to the main menu")
+            Menu.add_row("3", "Cancel a ticket ")
+            Menu.add_row("4", "View your profile information ")
+            Menu.add_row("5", "Change your profile information")
+            Menu.add_row("6", "Go back to the main menu")
 
             console.print(Menu)
 
@@ -291,9 +296,12 @@ class Menu:
                 userout.viewtickets()
 
             elif adPrompt == "3":
-                userout.userinfo()
+                pass
 
             elif adPrompt == "4":
+                userout.userinfo()
+
+            elif adPrompt == "5":
                 sure = Prompt.ask("Are you sure you want to change your username and password? (Y/N) ")
                 if sure == "Y" or sure == "y":
                     newusername = Prompt.ask("Enter your new username ")
@@ -311,7 +319,7 @@ class Menu:
             elif adPrompt == "c" or adPrompt == "C":
                 menu()
 
-            elif adPrompt == "5":
+            elif adPrompt == "6":
                 return False
 
             elif adPrompt == "Q" or adPrompt == "q":
