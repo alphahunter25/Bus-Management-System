@@ -7,16 +7,19 @@ from rich.panel import Panel
 from rich.text import Text
 import os
 import time
+import pickle
+
 
 os.system("cls")
 console = Console()
 
-lahoreBranch = Branch("Lahore", 5000)
+data["branch"] = Branch("Lahore", 5000)
 
 
-accounts = []
+
+# accounts = []
 def clashcheck(user):
-    for i in accounts:
+    for i in data["accounts"]:
         if i.username == user:
             return True
 
@@ -24,8 +27,18 @@ def clashcheck(user):
 class Menu:
     def exiter(self):
         console.print(Text("Thank you for using the Bus Management System.", style = "bold red"))
+        
+        
+        abc = pickle.dumps(data)
+        with open("data.pickle", "wb") as f:
+            f.write(abc)
+
+        with open("data.pickle", "rb") as f:
+            datas = pickle.load(f)
+            print(datas["branch"].routes[0].display())
+        
         time.sleep(3)
-        exit()
+        # exit()
 
     def intcheck(self, n):
         try:
@@ -84,15 +97,15 @@ class Menu:
             adPrompt = Prompt.ask("\nPlease choose one of the options / Press Q to Quit / Press C to clear the screen ")
 
             if adPrompt == "1":
-                if len(lahoreBranch.routes) != 0:
+                if len(data["branch"].routes) != 0:
                     newFare = self.intcheck("Please enter the new fare ")
-                    lahoreBranch.changefare(newFare)
+                    data["branch"].changefare(newFare)
 
                 else:
                     console.print(Text("No bus currently added . . . use command number 3 to add a route first ", style = "yellow"))
 
             elif adPrompt == "2":
-                revenuecalc = lahoreBranch.revenue 
+                revenuecalc = data["branch"].revenue 
                 console.print(Text(f"This branch has made Rs{revenuecalc} since it was made.", style = "bold underline medium_spring_green"))
 
             elif adPrompt == "3":
@@ -102,13 +115,13 @@ class Menu:
                 time = Prompt.ask("Please enter the departure time of the new route ")
 
                 newRoute = Route(start, end, fare, time)
-                lahoreBranch.routes.append(newRoute)
-                lahoreBranch.buses.append(Economy(newRoute))
-                if len(lahoreBranch.routes) == 1:
-                    lahoreBranch.buses.append(FirstClass(newRoute))
+                data["branch"].routes.append(newRoute)
+                data["branch"].buses.append(Economy(newRoute))
+                if len(data["branch"].routes) == 1:
+                    data["branch"].buses.append(FirstClass(newRoute))
                     
                 else:
-                    lahoreBranch.buses.append(FirstClass(newRoute, lahoreBranch.buses[-2].fare))
+                    data["branch"].buses.append(FirstClass(newRoute, data["branch"].buses[-2].fare))
 
                 console.print(Text(f"Route succesfully added", style = "bold underline medium_spring_green"))
 
@@ -161,8 +174,8 @@ class Menu:
                 while clashcheck(username) == True:
                     username = Prompt.ask("\nUsername already exists. Please enter a new username ")
 
-                tempaccount = Account(username, password, name, age , cnic, lahoreBranch)
-                accounts.append(tempaccount)
+                tempaccount = Account(username, password, name, age , cnic, data["branch"])
+                data["accounts"].append(tempaccount)
 
                 console.print(Text("ACCOUNT CREATED SUCCESSFULLY\n\n", style = "bold cyan underline"))
 
@@ -176,8 +189,8 @@ class Menu:
 
 
 
-                    for i in range(len(accounts)):
-                        if username == accounts[i].username and password == accounts[i].password:
+                    for i in range(len(data["accounts"])):
+                        if username == data["accounts"][i].username and password == data["accounts"][i].password:
                             return i
 
                     else:
@@ -282,8 +295,6 @@ class Menu:
 
 
 
-
-
 def main():
     # user / admin selection
     menuinit = Menu()
@@ -304,7 +315,7 @@ def main():
         if type(menuout) ==  int:#checking if signin was successful
            
             os.system("cls")
-            usermenu = menuinit.usersuccess(accounts[menuout]) #user menu
+            usermenu = menuinit.usersuccess(data["accounts"][menuout]) #user menu
             if usermenu == False: 
                 main()
 
@@ -319,26 +330,6 @@ def main():
 
 
 main()
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

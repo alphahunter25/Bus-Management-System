@@ -5,9 +5,21 @@ from rich import box
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
+import json
 
 console = Console()
 # from main import console
+
+
+
+data = {
+    "accounts" : []
+
+}
+
+
+
+
 
 def intcheck(n):
     try:
@@ -20,7 +32,7 @@ def intcheck(n):
 
 #accounts system
 class Person:
-    def __init__(self, name, age, cnic = str(randint(100000, 999999))):
+    def __init__(self, name, age, cnic):
         self.name = name
         self.age = age
         self.cnic = cnic
@@ -39,9 +51,7 @@ class Account(Person):
         self.username = username
         self.password = password
         self.branch =branch
-        self.name = name
-        self.age = age
-        self.cnic = cnic
+        super().__init__(name, age, cnic)
         self.bookings = []
 
     def changeinfo(self, username, password, age, cnic):
@@ -123,7 +133,6 @@ class Account(Person):
             chosenbus.seats[availableseat].book(self.username)
             chosenbus.seatavailability()
             self.bookings.append(ticket)
-            self.branch.revenue += self.branch.routes[choice-1].fare
             self.branch.revenue += chosenbus.fare
             return f"Ticket booked successfully."
 
@@ -157,9 +166,10 @@ class Branch:
         self.code = randint(10000, 99999)
         self.location = location
         self.routes = []
+        self.firstfare = fare
         for i in self.routes:
             self.buses.append(Economy(i))
-            self.buses.append(FirstClass(i, fare))
+            self.buses.append(FirstClass(i, self.firstfare))
         self.buses = []
         self.revenue = 0
 
@@ -177,8 +187,8 @@ class Branch:
 
 
 class Seat:
-    def __init__(self):
-        self.availability = "Available"
+    def __init__(self, avail = "Available"):
+        self.availability = avail
 
     def book(self, account):
         self.bookedby = account
@@ -190,7 +200,7 @@ class Seat:
 
 class Bus:
     def __init__(self, route):
-        self.license = randint(1000, 9999)
+        self.license = randint(10000, 99999)
         self.route = route
         self.numseats = 24
         self.seats = []
@@ -198,8 +208,6 @@ class Bus:
         for i in range(self.numseats):
             self.seats.append(Seat())
         self.availability = "Available"
-
-        self.availableseats = self.seats.copy()
 
 
     def seatinfo(self, num):
