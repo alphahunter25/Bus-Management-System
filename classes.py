@@ -45,7 +45,7 @@ class Account(Person):
 
     def viewtickets(self):
         if len(self.bookings) >0:
-            Menu = Table(title="Current Bookings:", box = box.DOUBLE_EDGE, width=55)
+            Menu = Table(title="Current Bookings:", box = box.DOUBLE_EDGE, width=55, show_lines = True)
             Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
             Menu.add_column("Ticket", style="white italic")
             for i in range(len(self.bookings)):
@@ -57,7 +57,13 @@ class Account(Person):
             console.print(Text("You do not currently have any bookings", style = "bold cyan"))
 
     def bookticket(self):
-        Menu = Table(title="Please choose one of the following Tickets", box = box.DOUBLE_EDGE, width=55)
+        def busselector(route, type):
+            for bus in range(len(self.branch.buses)):
+                if self.branch.buses[bus].route == route and self.branch.buses[bus].type == type:
+                    return self.branch.buses[bus]
+
+
+        Menu = Table(title="Please choose one of the following Tickets", box = box.DOUBLE_EDGE, width=55, show_lines = True)
         Menu.add_column("Key", style="yellow bold", justify="center", width = 5)
         Menu.add_column("Options", style="white italic")
 
@@ -67,37 +73,41 @@ class Account(Person):
         console.print(Menu)
 
         choice = int(Prompt.ask("Enter your choice: "))
+        if choice > len(self.branch.routes) or choice < 1:
+            return "Invalid choice"
         tier = Prompt.ask(f"Would you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.buses[1].fare} on First Class)\nEnter E for Economy or F for First Class: ")
         if choice-1 < len(self.branch.routes) and (tier == "E" or tier == "e"):
-            if self.branch.buses[i*2].availability == "booked":
+            chosenbus = busselector(self.branch.routes[choice-1], "Economy")
+            if chosenbus.availability == "booked":
                 return "Sorry, this bus is fully booked."
-            ticket = Ticket(self.branch.buses[i*2-1], self.branch.routes[choice-1])
+            ticket = Ticket(self.branch.routes[choice-1], chosenbus)
             self.bookings.append(ticket)
             availableseat = 0
-            for i in range(len(self.branch.buses[i*2-1].seats)):
-                if self.branch.buses[i*2-1].seats[i].availability == "Available":
+            for i in range(len(chosenbus.seats)):
+                if chosenbus.seats[i].availability == "Available":
                     availableseat += i
                     break
-            self.branch.buses[i*2-1].seats[availableseat].book(self.username)
-            self.branch.buses[i*2-1].seatavailability()
+            chosenbus.seats[availableseat].book(self.username)
+            chosenbus.seatavailability()
             self.branch.revenue += self.branch.routes[choice-1].fare
             return f"Ticket booked successfully."
             
 
         elif choice-1 < len(self.branch.routes) and (tier == "F" or tier == "f"):
-            if self.branch.buses[i*2].seats.availability == "booked":
+            chosenbus = busselector(self.branch.routes[choice-1], "First Class")
+            if chosenbus.availability == "booked":
                 return "Sorry, this bus is booked."
-            ticket = Ticket(self.branch.buses[i*2], self.branch.routes[choice-1])
+            ticket = Ticket(self.branch.routes[choice-1], chosenbus)
             availableseat = 0
-            for i in range(len(self.branch.buses[i*2].seats)):
-                if self.branch.buses[i*2][i].availability == "Available":
+            for i in range(len(chosenbus.seats)):
+                if chosenbus.seats[i].availability == "Available":
                     availableseat += i
                     break
-            self.branch.buses[i*2].seats[availableseat].book(self.username)
-            self.branch.buses[i*2].seatavailability()
+            chosenbus.seats[availableseat].book(self.username)
+            chosenbus.seatavailability()
             self.bookings.append(ticket)
             self.branch.revenue += self.branch.routes[choice-1].fare
-            self.branch.revenue += self.branch.buses[i*2].fare
+            self.branch.revenue += chosenbus.fare
             return f"Ticket booked successfully."
 
         else:
@@ -241,9 +251,11 @@ class Ticket:
         self.route = route
         self.bus = bus
 
+    
+
 
     def display(self):
-        return f"{self.route.display()}\n\nTier: {self.bus.tier}\nLicense Plate: {self.bus.license}\nSeat Number: {self.seatnum}"
+        return f"{self.route.display()}\nTier: {self.bus.type}\nLicense Plate: {self.bus.license}"
 
 
 

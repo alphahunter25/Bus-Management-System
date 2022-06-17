@@ -51,7 +51,7 @@ class Menu:
 
         looper = True
         while looper:
-            useadPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
+            useadPrompt = Prompt.ask("\nPlease choose one of the options / Press Q to Quit / Press C to clear the screen ")
             if useadPrompt == "1" or useadPrompt == "2":
                 looper = False
                 return useadPrompt
@@ -73,14 +73,13 @@ class Menu:
         Menu.add_row("1", "Change the fare of the First Class buses")
         Menu.add_row("2", "View branch revenue")
         Menu.add_row("3", "Add another route to this branch")  
-        Menu.add_row("4", "Clear the screen")
-        Menu.add_row("5", "Go back to the main menu")                
+        Menu.add_row("4", "Go back to the main menu")                
 
         console.print(Menu)
 
         looper = True
         while looper:
-            adPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
+            adPrompt = Prompt.ask("\nPlease choose one of the options / Press Q to Quit / Press C to clear the screen ")
 
             if adPrompt == "1":
                 if len(lahoreBranch.routes) != 0:
@@ -114,10 +113,10 @@ class Menu:
             elif adPrompt == "Q" or adPrompt == "q":
                 self.exiter()
 
-            elif adPrompt == "4":
+            elif adPrompt == "c" or adPrompt == "C":
                 return self.admin()
 
-            elif adPrompt == "5":
+            elif adPrompt == "4":
                 looper = False
                 return False
 
@@ -138,11 +137,12 @@ class Menu:
         Menu.add_column("Options", style="white italic")
         Menu.add_row("1", "Log in ")
         Menu.add_row("2", "Create a new account")
-        Menu.add_row("3", "Clear screen ")
+        Menu.add_row("3", "Go back to the main menu")
+
         console.print(Menu)
 
         while looper:
-            adPrompt = Prompt.ask("Please choose one of the options or press Q to quit ")
+            adPrompt = Prompt.ask("Please choose one of the options / Press Q to Quit / Press C to clear the screen ")
 
             if adPrompt == "2":
                 username = Prompt.ask("\nEnter your new username ")
@@ -187,9 +187,13 @@ class Menu:
                     looper = False
                     return a
 
-
-
             elif adPrompt == "3":
+                looper = False
+                return False
+
+
+
+            elif adPrompt == "c" or adPrompt == "C":
                 return self.user()
 
             elif adPrompt == "Q" or adPrompt == "q":
@@ -219,15 +223,14 @@ class Menu:
             Menu.add_row("2", "View booked tickets ")
             Menu.add_row("3", "View your profile information ")
             Menu.add_row("4", "Change your profile information")
-            Menu.add_row("5", "Clear the screen")
-            Menu.add_row("6", "Go back to the main menu")
+            Menu.add_row("5", "Go back to the main menu")
 
             console.print(Menu)
 
         menu()
         looper = True
         while looper:
-            adPrompt = Prompt.ask("\nPlease choose one of the options or press Q to quit ")
+            adPrompt = Prompt.ask("\nPlease choose one of the options / Press Q to Quit / Press C to clear the screen ")
 
             if adPrompt == "1":
                 console.print(Text(userout.bookticket(), style = "bold cyan"))
@@ -250,14 +253,18 @@ class Menu:
                 elif sure == "N" or sure == "n":
                     pass
 
-            elif adPrompt == "5":
+            elif adPrompt == "c" or adPrompt == "C":
                 menu()
 
-            elif adPrompt == "6":
+            elif adPrompt == "5":
                 return False
 
             elif adPrompt == "Q" or adPrompt == "q":
                 self.exiter()
+
+            else:
+                console.print(Text("INVALID OPTION\n", style = "bold red underline"))
+                
             
 
 
@@ -295,6 +302,9 @@ def main():
             usermenu = menuinit.usersuccess(accounts[menuout]) #user menu
             if usermenu == False: 
                 main()
+
+        elif menuout == False:
+            main()
 
         else:
             console.print(Text("UNKNOWN ERROR . . . PLEASE RESTART", style = "bold red underline"))
