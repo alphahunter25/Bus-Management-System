@@ -1,17 +1,10 @@
-from classes import *
-from rich.console import Console
-from rich.table import Table
-from rich import box
-from rich.prompt import Prompt
-from rich.panel import Panel
-from rich.text import Text
-import os
+lister = [1, 2, 3, 4, 5, 6, 7, 8]
 
-os.system("cls")
-console = Console()
+for i in lister:
+    if i == 4 or i == 5:
+        lister.remove(i)
+for i in lister:
+    if i == 4 or i == 5:
+        lister.remove(i)
 
-
-panel = Panel(Text("Welcome to the Bus Management System." , justify="left", style = "bold cyan"))
-console.print(panel)
-
-
+print(lister)

@@ -5,7 +5,6 @@ from rich import box
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
-import json
 
 console = Console()
 # from main import console
@@ -26,6 +25,28 @@ def intcheck(n):
     except:
         console.print(Text("PLEASE ENTER A NUMBER", style = "yellow bold"))
         return intcheck(n)
+
+#route management
+class Route:
+    def __init__(self, start, destination, fee, departure):
+        self.start = start
+        self.destination = destination
+        self.fare = fee
+        self.departure = departure
+    
+    def display(self):
+        return f"{self.start} to {self.destination}\nFee: {self.fare}\nDeparture: {self.departure}"
+
+#tickets
+class Ticket:
+    def __init__(self, route, bus):
+        self.route = route
+        self.bus = bus
+
+
+    def display(self):
+        return f"{self.route.display()}\nTier: {self.bus.type}\nLicense Plate: {self.bus.license}"
+
 
 #accounts system
 class Person:
@@ -66,11 +87,17 @@ class Account(Person):
 
     def viewtickets(self):
         if len(self.bookings) >0:
+            console.print(self.bookings)
             Menu = Table(title="Current Bookings:", box = box.DOUBLE_EDGE, width=55, show_lines = True)
             Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
             Menu.add_column("Ticket", style="white italic")
             for i in range(len(self.bookings)):
-                Menu.add_row(f"{i+1}", f"{self.bookings[i].display()}")
+                try:
+                    Menu.add_row(f"{i+1}", f"{self.bookings[i].display()}")
+                except:
+                    Menu.add_row(f"{i+1}", f"{self.bookings[i]}")
+
+                    
 
             console.print(Menu)
 
@@ -80,9 +107,9 @@ class Account(Person):
     def bookticket(self):
         if len(self.branch.routes) == 0:
             return "No buses currently available"
-        def busselector(route, type):
+        def busselector(route, typer):
             for bus in range(len(self.branch.buses)):
-                if self.branch.buses[bus].route == route and self.branch.buses[bus].type == type:
+                if self.branch.buses[bus].route == route and self.branch.buses[bus].type == typer:
                     return self.branch.buses[bus]
 
 
@@ -253,33 +280,6 @@ class FirstClass(Bus):
     def businfo(self):
         print(f"Tier - {self.type}")
         super().businfo()
-
-
-#route management
-class Route:
-    def __init__(self, start, destination, fee, departure):
-        self.start = start
-        self.destination = destination
-        self.fare = fee
-        self.departure = departure
-    
-    def display(self):
-        return f"{self.start} to {self.destination}\nFee: {self.fare}\nDeparture: {self.departure}"
-
-
-
-
-#tickets
-class Ticket:
-    def __init__(self, route, bus):
-        self.route = route
-        self.bus = bus
-
-    
-
-
-    def display(self):
-        return f"{self.route.display()}\nTier: {self.bus.type}\nLicense Plate: {self.bus.license}"
 
 
 

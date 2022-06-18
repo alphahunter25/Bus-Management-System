@@ -31,6 +31,18 @@ def clashcheck(user):
 
 
 class Menu:
+    #methods used in other methods
+    def routeviewer(self):
+
+        Menu = Table(title="Current registered routes : ", box = box.DOUBLE_EDGE, width=55, show_lines = True)
+        Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
+        Menu.add_column("Route", style="white italic")
+
+        for i in range(len(data["branch"].routes)):
+            Menu.add_row(f"{i+1}", data["branch"].routes[i].display())
+
+        console.print(Menu) 
+
     def exiter(self):
         console.print(Text("Thank you for using the Bus Management System.", style = "bold red"))
         
@@ -40,7 +52,7 @@ class Menu:
             f.write(abc)
 
 
-        time.sleep(3)
+        time.sleep(2)
         exit()
 
     def intcheck(self, n):
@@ -54,6 +66,8 @@ class Menu:
             
             return self.intcheck(n)
 
+
+    #actual menus
     def intro(self):
         os.system("cls")        
         panel = Panel(Text("Welcome to the Bus Management System." , justify="center", style = "bold cyan"))
@@ -75,6 +89,9 @@ class Menu:
                 return useadPrompt
             elif useadPrompt == "Q" or useadPrompt == "q":
                 self.exiter()
+
+            elif useadPrompt == "C" or useadPrompt == "c":
+                return self.intro()
             else:
                 console.print(Text("Please enter a valid option", style = "bold red"))
 
@@ -91,9 +108,10 @@ class Menu:
         Menu.add_row("1", "Change the fare of the First Class buses")
         Menu.add_row("2", "View branch revenue")
         Menu.add_row("3", "Add another route to this branch")
-        Menu.add_row("4", "View all routes")  
-        Menu.add_row("5", "Depart all buses on a route")
-        Menu.add_row("6", "Go back to the main menu")                
+        Menu.add_row("4", "Delete a route")
+        Menu.add_row("5", "View all routes")  
+        Menu.add_row("6", "Depart all buses on a route")
+        Menu.add_row("7", "Go back to the main menu")                
 
         console.print(Menu)
 
@@ -136,32 +154,45 @@ class Menu:
             elif adPrompt == "c" or adPrompt == "C":
                 return self.admin()
 
-
             elif adPrompt == "4":
+                
                 if len(data["branch"].routes) != 0:
-                    Menu = Table(title="Current registered routes : ", box = box.DOUBLE_EDGE, width=55, show_lines = True)
-                    Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
-                    Menu.add_column("Route", style="white italic")
+                    self.routeviewer()
+                    route = intcheck("\nPlease enter the route number you want to delete ")
+                    for i in data["accounts"]:
+                        for bookings in i.bookings:
+                            if bookings.route == data["branch"].routes[route-1]:
+                                data["branch"].revenue -= bookings.route.fare
+                                if bookings.bus == type(FirstClass):
+                                    data["branch"].revenue -= data["branch"].firstfare
+                                i.bookings.remove(bookings)
+                                i.bookings.append(Text("Sorry, we are no longer travelling on this route, you will be refunded"))
 
-                    for i in range(len(data["branch"].routes)):
-                        Menu.add_row(f"{i+1}", data["branch"].routes[i].display())
 
-                    console.print(Menu)    
+
+                    
+                    console.print(Text(f"The route has been deleted", style = "bold underline medium_spring_green"))
+                    for i in data["branch"].buses:
+                        if i.route == data["branch"].routes[route-1]:
+                            data["branch"].buses.remove(i)
+                    for i in data["branch"].buses:
+                        if i.route == data["branch"].routes[route-1]:
+                            data["branch"].buses.remove(i)
+                    data["branch"].routes.pop(int(route)-1)
+                    
+
+
+            elif adPrompt == "5":
+                if len(data["branch"].routes) != 0:
+                    self.routeviewer()
 
                 else:
                     console.print(Text("No routes currently added . . . use command number 3 to add a route first ", style = "yellow"))            
 
-            elif adPrompt == "5":
+            elif adPrompt == "6":
                 if len(data["branch"].routes) != 0:
-                    Menu = Table(title="Current registered routes : ", box = box.DOUBLE_EDGE, width=55, show_lines = True)
-                    Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
-                    Menu.add_column("Route", style="white italic")
+                    self.routeviewer()
 
-                    branch = data["branch"]
-                    for i in range(len(data["branch"].routes)):
-                        Menu.add_row(f"{i+1}", f"{branch.routes[i].display()}")
-
-                    console.print(Menu) 
 
                     route = self.intcheck("Please enter the route number you want to depart ")
                     if route <= len(data["branch"].routes):
@@ -176,9 +207,10 @@ class Menu:
                 else:
                     console.print(Text("No routes currently added . . . use command number 3 to add a route first ", style = "yellow"))   
 
-            elif adPrompt == "6":
+            elif adPrompt == "7":
                 looper = False
                 return False
+
 
             else:
                 console.print(Text("Please enter a valid option", style = "bold red"))
@@ -364,7 +396,7 @@ def main():
 
         else:
             console.print(Text("UNKNOWN ERROR . . . PLEASE RESTART", style = "bold red underline"))
-            time.sleep(3)
+            time.sleep(2)
             exit()
 
 
