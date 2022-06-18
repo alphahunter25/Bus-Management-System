@@ -23,7 +23,7 @@ except:
     pass
 
 
-# accounts = []
+
 def clashcheck(user):
     for i in data["accounts"]:
         if i.username == user:
@@ -39,10 +39,7 @@ class Menu:
         with open("data.pickle", "wb") as f:
             f.write(abc)
 
-        # with open("data.pickle", "rb") as f:
-        #     datas = pickle.load(f)
-        #     print(datas)
-        
+
         time.sleep(3)
         exit()
 
@@ -335,14 +332,6 @@ class Menu:
                 console.print(Text("INVALID OPTION\n", style = "bold red underline"))
                 
             
-
-
-
-
-
-
-
-
 
 
 

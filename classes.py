@@ -18,9 +18,6 @@ data = {
 }
 
 
-
-
-
 def intcheck(n):
     try:
         age = int(Prompt.ask(n))
@@ -288,8 +285,6 @@ class Ticket:
 
 #admin
 class Admin:
-    # def changefares(self, bus):
-    #     bus.setfare(int(input("Enter the new fare: ")))
 
     def viewrevenue(self, branch):
         print(f"{branch.location} has made ${branch.revenue}")
