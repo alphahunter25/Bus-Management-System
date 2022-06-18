@@ -15,6 +15,12 @@ console = Console()
 
 data["branch"] = Branch("Lahore", 5000)
 
+try:
+    with open("data.pickle", "rb") as f:
+        data = pickle.load(f)
+
+except:
+    pass
 
 
 # accounts = []
@@ -33,12 +39,12 @@ class Menu:
         with open("data.pickle", "wb") as f:
             f.write(abc)
 
-        with open("data.pickle", "rb") as f:
-            datas = pickle.load(f)
-            print(datas)
+        # with open("data.pickle", "rb") as f:
+        #     datas = pickle.load(f)
+        #     print(datas)
         
         time.sleep(3)
-        # exit()
+        exit()
 
     def intcheck(self, n):
         try:
