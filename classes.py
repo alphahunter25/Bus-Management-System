@@ -3,7 +3,6 @@ from rich.console import Console
 from rich.table import Table
 from rich import box
 from rich.prompt import Prompt
-from rich.panel import Panel
 from rich.text import Text
 
 console = Console()
@@ -164,10 +163,10 @@ class Account(Person):
 
 
     def cancelticket(self):
-        for i in range(len(self.bookings)):
-            print(f"{i+1} : {self.bookings[i].display()}")
+
+        self.viewtickets()
         choice = int(input("Enter the number of the ticket you want to remove: "))
-        if choice < len(self.bookings):
+        if choice < len(self.bookings) and choice > 0:
             for bus in self.branch.buses:
                 if bus.license == self.bookings[choice-1].bus.license:
                     bus.seats.cancel(self.username)
@@ -176,7 +175,7 @@ class Account(Person):
             self.bookings.pop(choice-1)
             return f"Ticket cancelled successfully."
 
-        print("Invalid choice.")
+        console.print(Text("INVALID OPTION", style = "bold red"))
         return False
 
             
@@ -197,7 +196,11 @@ class Branch:
         self.revenue = 0
 
     def branchinfo(self):
-        print(f"Branch Code - {self.code}\nBranch Location - {self.location}\nBranch Routes - {self.routes}\nBranch Buses - {self.buses}\nBranch Revenue - {self.revenue}")
+        console.print(Text("\nBranch information : ", style = "green bold underline"))
+        console.print(Text("Code : ", style = "green"), Text(str(self.code), style = "white"))
+        console.print(Text("Location : ", style = "green"), Text(self.location, style = "white"))
+        console.print(Text("Revenue : Rs.", style = "green"), Text(str(self.revenue), style = "white"))
+        
 
     def changefare(self, fare):
         for i in self.routes:
@@ -207,8 +210,7 @@ class Branch:
         self.firstfare = fare     
 
 
-    def viewroutes(self):
-        print(f"Current Routes:\n{self.routes}")
+
 
 
 class Seat:
@@ -272,28 +274,13 @@ class FirstClass(Bus):
         self.fare = fare
         self.type = "First Class"
 
-    def setfare(self, fare):
-        self.fare = fare
-        print(f"The fare is now {self.fare}")
-
     def businfo(self):
         print(f"Tier - {self.type}")
         super().businfo()
 
 
 
-#admin
-class Admin:
 
-    def viewrevenue(self, branch):
-        print(f"{branch.location} has made ${branch.revenue}")
-
-    def addroute(self,branch, start, des, fee, dep):
-        branch.routes.append(Route(start, des, fee, dep))
-        temp = Economy(branch.routes[-1])
-        branch.buses.append(temp)
-        temp = FirstClass(branch.routes[-1])
-        branch.buses.append(temp)
 
 
 

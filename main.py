@@ -112,7 +112,8 @@ class Menu:
         Menu.add_row("4", "Delete a route")
         Menu.add_row("5", "View all routes")  
         Menu.add_row("6", "Depart all buses on a route")
-        Menu.add_row("7", "Go back to the main menu")                
+        Menu.add_row("7", "View branch information")
+        Menu.add_row("8", "Go back to the main menu")                
 
         console.print(Menu)
 
@@ -207,8 +208,11 @@ class Menu:
 
                 else:
                     console.print(Text("No routes currently added . . . use command number 3 to add a route first ", style = "yellow"))   
-
+            
             elif adPrompt == "7":
+                data["branch"].branchinfo()
+            
+            elif adPrompt == "8":
                 looper = False
                 return False
 
@@ -331,7 +335,7 @@ class Menu:
                 userout.viewtickets()
 
             elif adPrompt == "3":
-                pass
+                userout.cancelticket()
 
             elif adPrompt == "4":
                 userout.userinfo()
