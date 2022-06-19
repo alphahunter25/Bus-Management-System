@@ -85,7 +85,6 @@ class Account(Person):
 
     def viewtickets(self):
         if len(self.bookings) >0:
-            console.print(self.bookings)
             Menu = Table(title="Current Bookings:", box = box.DOUBLE_EDGE, width=55, show_lines = True)
             Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
             Menu.add_column("Ticket", style="white italic")
@@ -166,11 +165,13 @@ class Account(Person):
 
         self.viewtickets()
         choice = int(input("Enter the number of the ticket you want to remove: "))
-        if choice < len(self.bookings) and choice > 0:
+        if choice <= len(self.bookings) and choice > 0:
             for bus in self.branch.buses:
                 if bus.license == self.bookings[choice-1].bus.license:
-                    bus.seats.cancel(self.username)
-                    bus.seatavailability()
+                    for seat in bus.seats:
+                        if seat.bookedby == self.username:
+                            seat.cancel()
+                            bus.seatavailability()
 
             self.bookings.pop(choice-1)
             return f"Ticket cancelled successfully."
@@ -214,8 +215,9 @@ class Branch:
 
 
 class Seat:
-    def __init__(self, avail = "Available"):
+    def __init__(self, avail = "Available"):  
         self.availability = avail
+        self.bookedby = None
 
     def book(self, account):
         self.bookedby = account

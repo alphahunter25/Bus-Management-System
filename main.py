@@ -341,7 +341,7 @@ class Menu:
                 userout.userinfo()
 
             elif adPrompt == "5":
-                sure = Prompt.ask("Are you sure you want to change your username and password? (Y/N) ")
+                sure = Prompt.ask("Are you sure you want to change your account details? (Y/N) ")
                 if sure == "Y" or sure == "y":
                     newusername = Prompt.ask("Enter your new username ")
                     newpassword = Prompt.ask("Enter your new password ")
