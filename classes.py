@@ -175,12 +175,16 @@ class Account(Person):
                             if type(bus) == FirstClass:
                                 self.branch.revenue -= bus.fare
                                 self.branch.revenue -= self.bookings[choice-1].route.fare
+                            else:
+                                self.branch.revenue -= self.bookings[choice-1].route.fare
+                                
 
             self.bookings.pop(choice-1)
-            return f"Ticket cancelled successfully."
+            console.print(Text("Ticket Cancelled Successfully", style = "bold cyan"))
+        else:
+            console.print(Text("INVALID OPTION", style = "bold red"))
+            return False
 
-        console.print(Text("INVALID OPTION", style = "bold red"))
-        return False
 
             
 
