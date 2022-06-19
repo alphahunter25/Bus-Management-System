@@ -155,6 +155,7 @@ class Account(Person):
             chosenbus.seatavailability()
             self.bookings.append(ticket)
             self.branch.revenue += chosenbus.fare
+            self.branch.revenue += self.branch.firstfare
             return f"Ticket booked successfully."
 
         else:
@@ -172,6 +173,9 @@ class Account(Person):
                         if seat.bookedby == self.username:
                             seat.cancel()
                             bus.seatavailability()
+                            if type(bus) == FirstClass:
+                                self.branch.revenue -= bus.fare
+                                self.branch.revenue -= self.bookings[choice-1].route.fare
 
             self.bookings.pop(choice-1)
             return f"Ticket cancelled successfully."
