@@ -341,10 +341,11 @@ class Menu:
                 if sure == "Y" or sure == "y":
                     newusername = Prompt.ask("Enter your new username ")
                     newpassword = Prompt.ask("Enter your new password ")
+                    newname = Prompt.ask("Enter your new name ")
                     newage = self.intcheck("Enter your new age ")
                     newcnic = self.intcheck("Enter your new cnic number ")
 
-                    userout.changeinfo(newusername, newpassword, newage, newcnic)
+                    userout.changeinfo(newusername, newpassword,newname, newage, newcnic)
                     console.print(Text(f"Your profile information has been changed and will be applied on your next login ", style = "bold cyan"))
 
 

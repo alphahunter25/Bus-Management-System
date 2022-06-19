@@ -55,7 +55,7 @@ class Person:
         self.age = age
         self.cnic = cnic
 
-    def editinfo(self, name, age, cnic):
+    def changeinfo(self, name, age, cnic):
         self.name = name
         self.age = age
         self.cnic = cnic
@@ -72,12 +72,11 @@ class Account(Person):
         super().__init__(name, age, cnic)
         self.bookings = []
 
-    def changeinfo(self, username, password, age, cnic):
+    def changeinfo(self, username, password,name, age, cnic):
         self.username = username
         self.password = password
-        self.age = age
-        self.cnic = cnic
-    
+        super().changeinfo(name, age, cnic)
+
     def userinfo(self):
         console.print(Text("\nAccount information : ", style = "green bold underline"))
         console.print(Text("Name : ", style = "green"), Text(self.name, style = "white"))
