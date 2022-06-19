@@ -8,6 +8,7 @@ from rich.text import Text
 import os
 import time
 import pickle
+import pwinput as pw
 
 
 os.system("cls")
@@ -260,8 +261,7 @@ class Menu:
             elif adPrompt == "1":
                 def userpasscheck():
                     username = Prompt.ask("\nEnter your username ")
-
-                    password = Prompt.ask("Enter your password ")
+                    password = pw.pwinput(prompt='Enter your password: ', mask='*')
 
 
 

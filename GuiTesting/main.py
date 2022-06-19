@@ -4,7 +4,7 @@ from rich import box
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
-
+import pwinput as pw
 
 import os
 os.system("cls")
@@ -27,8 +27,6 @@ console.print(panel)
 
 texter = Text("hello hello", style = "bold yellow underline")
 console.print(texter)
-neighbor = "bruh"
-panel = Text(f"Hello {neighbor}", justify="center", style = "underline")
-console.print(panel)
-cnic = 100000
-console.print(Text(f"CNIC : [not bold]{str(cnic)}[/not bold]", style = "bold"))
+
+a = pw.pwinput(prompt='PW: ', mask='*')
+console.print(a)
