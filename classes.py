@@ -7,9 +7,6 @@ from rich.text import Text
 
 console = Console()
 
-
-
-
 data = {
     "accounts" : []
 

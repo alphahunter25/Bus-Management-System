@@ -146,7 +146,7 @@ class Menu:
                     data["branch"].buses.append(FirstClass(newRoute))
                     
                 else:
-                    data["branch"].buses.append(FirstClass(newRoute, data["branch"].buses[-2].fare))
+                    data["branch"].buses.append(FirstClass(newRoute, data["branch"].firstfare))
 
                 console.print(Text(f"Route succesfully added", style = "bold underline medium_spring_green"))
 
