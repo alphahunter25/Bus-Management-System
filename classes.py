@@ -154,8 +154,7 @@ class Account(Person):
             chosenbus.seats[availableseat].book(self.username)
             chosenbus.seatavailability()
             self.bookings.append(ticket)
-            self.branch.revenue += chosenbus.fare
-            self.branch.revenue += self.branch.firstfare
+            self.branch.revenue += (chosenbus.fare + self.branch.routes[choice-1].fare)
             return f"Ticket booked successfully."
 
         else:
