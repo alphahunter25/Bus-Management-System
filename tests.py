@@ -1,10 +1,16 @@
-lister = [1, 2, 3, 4, 5, 6, 7, 8]
 
-for i in lister:
-    if i == 4 or i == 5:
-        lister.remove(i)
-for i in lister:
-    if i == 4 or i == 5:
-        lister.remove(i)
+def intcheck(n):
+    try:
+        age = int(input(n))
+        
+        return age
 
-print(lister)
+    except:
+        print("PLEASE ENTER A NUMBER")
+        
+        return intcheck(n)
+
+a = 192
+
+b = intcheck(f"Enter your age:, prev age {a}")
+print(b)

@@ -120,7 +120,7 @@ class Account(Person):
         choice = intcheck("Enter your choice: ")
         if choice <= 0 or choice > len(self.branch.routes):
             return "Invalid choice"
-        tier = Prompt.ask(f"Would you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.buses[1].fare} on First Class)\nEnter E for Economy or F for First Class: ")
+        tier = Prompt.ask(f"\nWould you like to go on our Economy buses or our First Class buses? (Extra fee of {self.branch.firstfare} on First Class)\nEnter E for Economy or F for First Class: ")
         if choice-1 < len(self.branch.routes) and (tier == "E" or tier == "e"):
             chosenbus = busselector(self.branch.routes[choice-1], "Economy")
             if chosenbus.availability == "booked":
@@ -208,11 +208,12 @@ class Branch:
         
 
     def changefare(self, fare):
-        for i in self.routes:
+        self.firstfare = fare
+        for i in self.buses:
             if type(i) == FirstClass:
                 i.fare = fare 
 
-        self.firstfare = fare     
+   
 
 
 

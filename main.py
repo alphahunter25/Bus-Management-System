@@ -14,7 +14,7 @@ import pwinput as pw
 os.system("cls")
 console = Console()
 
-data["branch"] = Branch("Lahore", 5000)
+data["branch"] = Branch("Lahore", 1000)
 
 try:
     with open("data.pickle", "rb") as f:
@@ -122,12 +122,8 @@ class Menu:
             adPrompt = Prompt.ask("\nPlease choose one of the options / Press Q to Quit / Press C to clear the screen ")
 
             if adPrompt == "1":
-                if len(data["branch"].routes) != 0:
-                    newFare = self.intcheck("Please enter the new fare ")
-                    data["branch"].changefare(newFare)
-
-                else:
-                    console.print(Text("No bus currently added . . . use command number 3 to add a route first ", style = "yellow"))
+                newfare = self.intcheck("Please enter the new fare ")
+                data["branch"].changefare(newfare)
 
             elif adPrompt == "2":
                 revenuecalc = data["branch"].revenue 
