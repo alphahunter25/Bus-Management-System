@@ -124,6 +124,7 @@ class Menu:
             if adPrompt == "1":
                 newfare = self.intcheck("Please enter the new fare ")
                 data["branch"].changefare(newfare)
+                console.print(Text("Fare changed successfully", style = "bold green"))
 
             elif adPrompt == "2":
                 revenuecalc = data["branch"].revenue 
