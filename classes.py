@@ -161,7 +161,7 @@ class Account(Person):
     def cancelticket(self):
 
         self.viewtickets()
-        choice = int(input("Enter the number of the ticket you want to remove: "))
+        choice = intcheck("Enter the number of the ticket you want to remove: ")
         if choice <= len(self.bookings) and choice > 0:
             for bus in self.branch.buses:
                 if bus.license == self.bookings[choice-1].bus.license:
