@@ -33,7 +33,7 @@ def clashcheck(user):
 
 class Menu:
     #methods used in other methods
-    def routeviewer(self):
+    def routeviewer(self): # association with branch 
 
         Menu = Table(title="Current registered routes : ", box = box.DOUBLE_EDGE, width=55, show_lines = True)
         Menu.add_column("No.", style="yellow bold", justify="center", width = 5)
@@ -44,7 +44,7 @@ class Menu:
 
         console.print(Menu) 
 
-    def exiter(self):
+    def exiter(self): 
         console.print(Text("Thank you for using the Bus Management System.", style = "bold red"))
         
         
@@ -97,7 +97,7 @@ class Menu:
                 console.print(Text("Please enter a valid option", style = "bold red"))
 
 
-    def admin(self):
+    def admin(self): #association with branch, initializes comp/aggre with economy and first class
         os.system("cls")
         panel = Panel(Text("Running the program as an Admin" , justify="center", style = "bold cyan"))
         console.print(panel)
@@ -217,7 +217,7 @@ class Menu:
             else:
                 console.print(Text("Please enter a valid option", style = "bold red"))
 
-    def user(self):
+    def user(self): 
         looper = True
         os.system("cls")
 

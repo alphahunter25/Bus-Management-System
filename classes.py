@@ -34,7 +34,7 @@ class Route:
         return f"{self.start} to {self.destination}\nFee: {self.fare}\nDeparture: {self.departure}"
 
 #tickets
-class Ticket:
+class Ticket: # aggregation with route and bus
     def __init__(self, route, bus):
         self.route = route
         self.bus = bus
@@ -60,7 +60,7 @@ class Person:
         print(f"Name: {self.name}\nAge: {self.age}\nCNIC: {self.cnic}")
 
 
-class Account(Person):
+class Account(Person): # aggregation with branch
     def __init__(self, username, password, name, age, cnic, branch):
         self.username = username
         self.password = password
@@ -68,7 +68,7 @@ class Account(Person):
         super().__init__(name, age, cnic)
         self.bookings = []
 
-    def changeinfo(self, username, password,name, age, cnic):
+    def changeinfo(self, username, password,name, age, cnic): #polymorphism with parent
         self.username = username
         self.password = password
         super().changeinfo(name, age, cnic)
@@ -98,7 +98,7 @@ class Account(Person):
         else:
             console.print(Text("You do not currently have any bookings", style = "bold cyan"))
 
-    def bookticket(self):
+    def bookticket(self): #aggregating ticket to self.branch
         if len(self.branch.routes) == 0:
             return "No buses currently available"
         def busselector(route, typer):
@@ -188,7 +188,7 @@ class Account(Person):
 
 
 #branch/bus system
-class Branch:
+class Branch: #initializaing composition 
     def __init__(self, location, fare):
         self.code = randint(10000, 99999)
         self.location = location
